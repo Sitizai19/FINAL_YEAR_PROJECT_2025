@@ -1,0 +1,67 @@
+[2025-10-24 01:41:25] Starting booking reminder process
+[2025-10-24 01:41:25] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:41:28] Starting booking reminder process
+[2025-10-24 01:41:28] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:41:30] Starting booking reminder process
+[2025-10-24 01:41:30] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:41:33] Starting booking reminder process
+[2025-10-24 01:41:33] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:41:47] Starting booking reminder process
+[2025-10-24 01:41:47] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:41:55] Starting booking reminder process
+[2025-10-24 01:41:55] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:42:09] Starting booking reminder process
+[2025-10-24 01:42:09] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:42:12] Starting booking reminder process
+[2025-10-24 01:42:12] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:42:15] Starting booking reminder process
+[2025-10-24 01:42:15] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:42:27] Starting booking reminder process
+[2025-10-24 01:42:27] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:42:29] Starting booking reminder process
+[2025-10-24 01:42:29] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:42:32] Starting booking reminder process
+[2025-10-24 01:42:32] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:42:34] Starting booking reminder process
+[2025-10-24 01:42:35] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:42:39] Starting booking reminder process
+[2025-10-24 01:42:39] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:42:43] Starting booking reminder process
+[2025-10-24 01:42:43] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:42:47] Starting booking reminder process
+[2025-10-24 01:42:47] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:43:30] Starting booking reminder process
+[2025-10-24 01:43:30] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-24 01:53:01] Starting booking reminder process
+[2025-10-24 01:53:01] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-26 10:22:11] Starting booking reminder process
+[2025-10-27 01:00:44] Starting booking reminder process
+[2025-10-27 01:00:55] Reminder process completed successfully. Total: 1, Success: 1, Errors: 0
+[2025-10-27 01:00:55] SUCCESS - Booking 10 (service) to user@example.com: Reminder email sent successfully
+[2025-10-27 01:05:58] Starting booking reminder process
+[2025-10-27 01:05:58] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-10-28 09:01:00] Starting booking reminder process
+[2025-10-30 20:01:25] Starting booking reminder process
+[2025-10-30 20:01:25] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-11-02 23:01:16] Starting booking reminder process
+[2025-11-03 00:23:09] Starting booking reminder process
+[2025-11-03 00:23:22] Reminder process completed successfully. Total: 2, Success: 2, Errors: 0
+[2025-11-03 00:23:22] SUCCESS - Booking 2 (service) to sitizenab785@gmail.com: Reminder email sent successfully
+[2025-11-03 00:23:22] SUCCESS - Booking 1 (hotel) to kl2311015158@student.uptm.edu.my: Reminder email sent successfully
+[2025-11-03 00:23:42] Starting booking reminder process
+[2025-11-03 00:23:42] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-11-03 00:39:10] Starting booking reminder process
+[2025-11-03 00:39:10] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
+[2025-11-03 10:13:37] Starting booking reminder process
+[2025-11-03 10:13:48] Reminder process completed successfully. Total: 2, Success: 2, Errors: 0
+[2025-11-03 10:13:48] SUCCESS - Booking 4 (service) to kl2311015158@student.uptm.edu.my: Reminder email sent successfully
+[2025-11-03 10:13:48] SUCCESS - Booking 2 (hotel) to kl2311015158@student.uptm.edu.my: Reminder email sent successfully
+[2025-11-04 00:52:53] Starting booking reminder process
+[2025-11-04 00:53:09] Reminder process completed successfully. Total: 2, Success: 2, Errors: 0
+[2025-11-04 00:53:09] SUCCESS - Booking 5 (service) to sitizenab785@gmail.com: Reminder email sent successfully
+[2025-11-04 00:53:09] SUCCESS - Booking 8 (hotel) to kl2311015158@student.uptm.edu.my: Reminder email sent successfully
+[2025-11-05 14:38:05] Starting booking reminder process
+[2025-11-05 14:38:47] Starting booking reminder process
+[2025-11-05 14:38:47] Reminder process failed: Error processing reminders: Database connection failed: could not establish connection to database
+[2025-11-05 14:45:36] Starting booking reminder process
+[2025-11-05 14:45:36] Reminder process completed successfully. Total: 0, Success: 0, Errors: 0
