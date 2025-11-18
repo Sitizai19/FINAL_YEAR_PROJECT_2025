@@ -1,0 +1,3060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Service - Catswell</title>
+    <link rel="stylesheet" href="styles.css?v=20250113">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        /* Booking Page Specific Styles */
+        .booking-page {
+            min-height: 100vh;
+            background: #ebdaf9;
+            background-attachment: fixed;
+            padding: 100px 20px 40px;
+            position: relative;
+        }
+
+        .booking-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+           
+        }
+
+        .booking-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .booking-header {
+            text-align: center;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .booking-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .booking-title h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #8c6caf;
+            margin: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .booking-title i {
+            font-size: 2rem;
+            color: #2c3e50;
+            opacity: 0;
+            transform: scale(0.8) rotate(-10deg);
+            animation: bounceIn 0.8s ease-out 0.6s forwards;
+        }
+
+        .booking-subtitle {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeInUp 0.8s ease-out 0.8s forwards;
+        }
+
+        /* Form Styles */
+        .booking-form {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out 1s forwards;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #3f3b57;
+        }
+
+        .section-title i {
+            color: #8c6caf;
+            font-size: 1.2rem;
+        }
+
+        /* Customer Information */
+        .customer-info {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+        }
+
+        .customer-info .info-field:nth-child(4) {
+            grid-column: 1 / -1;
+        }
+
+        .info-field {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+
+        .info-field label {
+            display: block;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .info-field span {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+
+        /* Pet Selection */
+        .pets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .pet-card {
+            background: white;
+            border: 3px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .pet-card.selected {
+            border-color: #8c6caf;
+            background: linear-gradient(135deg, #f0f0ff 0%, #e0d8ff 100%);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(140, 108, 175, 0.2);
+        }
+
+        .pet-card.selected::before {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #8c6caf;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .pet-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 3px solid #e9ecef;
+        }
+
+        .pet-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pet-image i {
+            font-size: 2rem;
+            color: #6c757d;
+        }
+
+        .pet-name {
+            font-weight: 600;
+            color: #3f3b57;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .pet-details {
+            font-size: 0.85rem;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        .pet-details div {
+            margin-bottom: 3px;
+        }
+
+        .pet-details div:last-child {
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+
+        .pet-details div:last-child strong {
+            color: #8c6caf;
+        }
+
+        .vaccine-status {
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            display: inline-block;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+
+        .vaccine-status.yes {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .vaccine-status.no {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        #noPetsMessage {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        #noPetsMessage.hidden {
+            display: none;
+        }
+
+        /* Service Selection */
+        .service-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+            transition: all 0.3s ease;
+        }
+    
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #8c6caf;
+            box-shadow: 0 0 0 3px rgba(140, 108, 175, 0.1);
+        }
+
+        .price-display {
+            background: #b891e4;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .price-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .price-breakdown {
+            margin-top: 8px;
+            background: #ffffff;
+            color: #3f3b57;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .price-breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 8px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95rem;
+        }
+
+        .price-breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .price-pet-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .price-pet-info:empty {
+            display: none;
+        }
+
+        .price-amount {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .price-info:has(.price-pet-info:empty) .price-amount {
+            font-size: 1.6rem;
+        }
+
+        .price-pet-info i,
+        .price-amount i {
+            font-size: 1.2rem;
+        }
+
+        /* Booking Details */
+        .booking-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .date-picker {
+            position: relative;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .time-slot {
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-weight: 500;
+        }
+
+        .slot-content {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .slot-time {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .slot-capacity {
+            font-size: 0.85rem;
+            color: #6c757d;
+            font-weight: 400;
+        }
+
+        .time-slot:hover {
+            border-color: #8c6caf;
+            background: #f8f9ff;
+        }
+
+        .time-slot.selected {
+            border-color: #8c6caf;
+            background: #b49bce;
+            color: white;
+        }
+
+        .time-slot.disabled {
+            background: #f8f9fa;
+            color: #adb5bd;
+            cursor: not-allowed;
+            border-color: #e9ecef;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .payment-option {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .payment-option:hover {
+            border-color: #8c6caf;
+            transform: translateY(-2px);
+        }
+
+        .payment-option.selected {
+            border-color: #8c6caf;
+            background: linear-gradient(135deg, #f0f0ff 0%, #e0d8ff 100%);
+        }
+
+        /* Tick indicator for selected payment option */
+        .payment-option.selected::before {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #8c6caf;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .payment-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .payment-header i {
+            font-size: 1.5rem;
+            color: #8c6caf;
+        }
+
+        .payment-header h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #3f3b57;
+        }
+
+        .bank-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .bank-info div {
+            margin-bottom: 5px;
+        }
+
+        .bank-info strong {
+            color: #495057;
+        }
+
+        /* Enhanced Receipt Upload Styles */
+        .receipt-upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .receipt-upload-area:hover {
+            border-color: #3b82f6;
+            background-color: #f0f9ff;
+        }
+
+        .receipt-upload-area.dragover {
+            border-color: #3b82f6;
+            background-color: #f0f9ff;
+            transform: scale(1.02);
+        }
+
+        .receipt-upload-content i {
+            font-size: 2rem;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+
+        .receipt-upload-content p {
+            margin: 0.5rem 0;
+            color: #4a5568;
+        }
+
+        .receipt-upload-link {
+            color: #3b82f6;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .receipt-upload-content small {
+            color: #718096;
+        }
+
+        /* Receipt Preview Styles */
+        .receipt-preview {
+            margin-top: 1rem;
+        }
+
+        .preview-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-container img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .file-icon {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 3rem;
+            color: #dc3545;
+        }
+
+        .preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .preview-container:hover .preview-overlay {
+            opacity: 1;
+        }
+
+        .remove-receipt-btn,
+        .change-receipt-btn,
+        .view-receipt-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .remove-receipt-btn {
+            color: #dc3545;
+        }
+
+        .remove-receipt-btn:hover {
+            background: #dc3545;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .change-receipt-btn {
+            color: #3b82f6;
+        }
+
+        .change-receipt-btn:hover {
+            background: #3b82f6;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .view-receipt-btn {
+            color: #28a745;
+        }
+
+        .view-receipt-btn:hover {
+            background: #28a745;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .receipt-info {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .receipt-info span {
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .receipt-info span:first-child {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .receipt-upload-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .receipt-upload-section.hidden {
+            display: none;
+        }
+
+        .qr-code {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .qr-code img {
+            max-width: 200px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Additional Notes */
+        .notes-section textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .notes-section textarea:focus {
+            outline: none;
+            border-color: #8c6caf;
+            box-shadow: 0 0 0 3px rgba(140, 108, 175, 0.1);
+        }
+
+        /* Action Buttons */
+        .form-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 150px;
+            justify-content: center;
+        }
+
+        .btn-back {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .btn-complete {
+            background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+            color: white;
+        }
+
+        .btn-complete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(140, 108, 175, 0.3);
+        }
+
+        .btn-complete:disabled {
+            background: #adb5bd;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #8c6caf;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) rotate(-10deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1) rotate(5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .booking-page {
+                padding: 80px 15px 30px;
+            }
+
+            .booking-form {
+                padding: 25px;
+            }
+
+            .booking-title h1 {
+                font-size: 2rem;
+            }
+
+            .form-section {
+                margin-bottom: 30px;
+            }
+
+            .customer-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .customer-info .info-field:nth-child(4) {
+                grid-column: 1;
+            }
+
+            .service-selection,
+            .booking-details,
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .pets-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .form-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .booking-title h1 {
+                font-size: 1.8rem;
+            }
+
+            .booking-subtitle {
+                font-size: 1rem;
+            }
+
+            .pets-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .room-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+
+            .room-legend {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* Error Messages */
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            border: 1px solid #f5c6cb;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            border: 1px solid #c3e6cb;
+        }
+
+        select option:disabled {
+            color: #999;
+            font-style: italic;
+        }
+
+        select option:disabled:first-child {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Footer Styles - Matching services.html */
+        .dashboard__footer {
+            background: #3f3b57;
+            padding: 1rem 0;
+            margin-top: 4rem;
+            color: white;
+        }
+
+        .footer__container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .footer__logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .footer__logo img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .footer__copyright {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.8rem;
+        }
+
+        /* Room Selection Styles */
+        .room-selection-container {
+            margin-top: 20px;
+        }
+
+        .room-legend {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+
+        .legend-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.35rem;
+        }
+
+        .legend-available { 
+            background-color: #10b981; 
+        }
+
+        .legend-occupied { 
+            background-color: #ef4444; 
+        }
+
+        .legend-maintenance { 
+            background-color: #f59e0b; 
+        }
+
+        .room-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .room-category {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+        }
+
+        .room-category-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #3f3b57;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .room-category-title i {
+            color: #8c6caf;
+        }
+
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .room-card {
+            height: 120px;
+            border-radius: 12px;
+            border: 2px solid #a7f3d0;
+            background: #ecfdf5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.2s ease;
+        }
+
+        .room-card:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
+        }
+
+        .room-card.available { 
+            border-color: #34d399; 
+            background: #ecfdf5; 
+        }
+
+        .room-card.occupied { 
+            border-color: #fecaca; 
+            background: #fef2f2; 
+            cursor: not-allowed;
+        }
+
+        .room-card.maintenance { 
+            border-color: #fde68a; 
+            background: #fffbeb; 
+            cursor: not-allowed;
+        }
+
+        .room-card.selected {
+            border-color: #8c6caf;
+            background: linear-gradient(135deg, #f0f0ff 0%, #e0d8ff 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(140, 108, 175, 0.2);
+        }
+
+        .room-card.selected::before {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #8c6caf;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .room-id { 
+            color: #065f46; 
+            font-weight: 600; 
+            font-size: 0.95rem; 
+        }
+
+        .room-card.occupied .room-id { 
+            color: #991b1b; 
+        }
+
+        .room-card.maintenance .room-id { 
+            color: #92400e; 
+        }
+
+        .room-card.selected .room-id { 
+            color: #8c6caf; 
+        }
+
+        .room-capacity { 
+            position: absolute; 
+            bottom: 8px; 
+            left: 8px; 
+            font-size: 0.7rem; 
+            color: #6b7280; 
+            background: #f9fafb; 
+            border: 1px solid #e5e7eb; 
+            border-radius: 6px; 
+            padding: 2px 6px; 
+        }
+
+        .room-note { 
+            position: absolute; 
+            bottom: 8px; 
+            right: 8px; 
+            max-width: 60%; 
+            font-size: 0.7rem; 
+            color: #374151; 
+            background: #fff; 
+            border: 1px solid #e5e7eb; 
+            border-radius: 6px; 
+            padding: 2px 6px; 
+            overflow: hidden; 
+            white-space: nowrap; 
+            text-overflow: ellipsis; 
+        }
+
+        .room-selection-message {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .room-selection-message.hidden {
+            display: none;
+        }
+
+        /* Stay Duration Display */
+        .stay-duration-display {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stay-duration-display #nightsCount {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #8c6caf;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .nights-breakdown {
+            font-size: 0.9rem;
+            color: #6c757d;
+            display: block;
+        }
+
+        .nights-breakdown.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+      <div class="nav__header">
+        <div class="nav__logo">
+          <img src="assets/logo.png" alt="Pet Place Logo" class="logo-img">
+        </div>
+        <div class="nav__menu__btn" id="menu-btn">
+          <i class="ri-menu-line"></i>
+        </div>
+      </div>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li class="nav__login-item">
+          <div
+            aria-label="User Profile"
+            tabindex="0"
+            role="button"
+            class="user-profile"
+            onclick="window.location.href='cust-dashboard.html'"
+          >
+            <div class="user-profile-inner">
+              <svg
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <g data-name="Layer 2" id="Layer_2">
+                  <path
+                    d="m15.626 11.769a6 6 0 1 0 -7.252 0 9.008 9.008 0 0 0 -5.374 8.231 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 9.008 9.008 0 0 0 -5.374-8.231zm-7.626-4.769a4 4 0 1 1 4 4 4 4 0 0 1 -4-4zm10 14h-12a1 1 0 0 1 -1-1 7 7 0 0 1 14 0 1 1 0 0 1 -1 1z"
+                  ></path>
+                </g>
+              </svg>
+              <p id="user-name">Log In</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Booking Page Content -->
+    <div class="booking-page">
+        <div class="booking-container">
+            <!-- Header Section -->
+            <div class="booking-header">
+                <div class="booking-title">
+                    <i class="ri-calendar-check-line"></i>
+                    <h1>Book Your Service</h1>
+                </div>
+                <p class="booking-subtitle">Complete your pet care booking in just a few steps</p>
+            </div>
+
+            <!-- Booking Form -->
+            <form class="booking-form" id="bookingForm">
+                <!-- 1. Customer Information -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="ri-user-line"></i>
+                        <h3>Customer Information</h3>
+                    </div>
+                    <div class="customer-info" id="customerInfo">
+                        <!-- Customer info will be loaded dynamically -->
+                        <div class="info-field">
+                            <label>Name</label>
+                            <span id="customerName">Loading...</span>
+                        </div>
+                        <div class="info-field">
+                            <label>Email</label>
+                            <span id="customerEmail">Loading...</span>
+                        </div>
+                        <div class="info-field">
+                            <label>Phone</label>
+                            <span id="customerPhone">Loading...</span>
+                        </div>
+                        <div class="info-field">
+                            <label>Address</label>
+                            <span id="customerAddress">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Pet Selection -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="ri-paw-print-line"></i>
+                        <h3>Select Your Pet</h3>
+                    </div>
+                    <div class="pets-grid" id="petsGrid">
+                        <!-- Pet cards will be loaded dynamically -->
+                        <div id="noPetsMessage" class="hidden">
+                            <div style="text-align: center; padding: 40px; color: #6c757d;">
+                                <i class="ri-paw-print-line" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                                <h3>No Pets Found</h3>
+                                <p>Please add a pet to your profile before booking a service.</p>
+                                <a href="cust-dashboard.html" class="btn" style="margin-top: 15px;">
+                                    <i class="ri-add-line"></i> Add Pet
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Service Selection -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="ri-service-line"></i>
+                        <h3>Select Service to Book</h3>
+                    </div>
+                    <div class="service-selection">
+                        <div class="form-group">
+                            <label for="serviceCategory">Service Category</label>
+                            <select id="serviceCategory" name="serviceCategory" required onchange="loadServices()">
+                                <option value="" disabled selected>Select Category</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="serviceName">Service Name</label>
+                            <select id="serviceName" name="serviceName" required onchange="updateServicePrice(); toggleRoomSelection(); loadAvailableTimeSlots(); startAvailabilityRefresh();">
+                                <option value="" disabled selected>Select Service</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Cat Hotel Room Selection (only for Cat Hotel services) -->
+                <div class="form-section" id="roomSelectionSection" style="display: none;">
+                    <div class="section-title">
+                        <i class="ri-hotel-bed-line"></i>
+                        <h3>Choose Your Cat Hotel Room</h3>
+                    </div>
+                    <div class="room-selection-container">
+                        <div class="room-legend">
+                            <div class="legend-item">
+                                <span class="legend-dot legend-available"></span>
+                                <span>Available</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot legend-occupied"></span>
+                                <span>Occupied</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot legend-maintenance"></span>
+                                <span>Maintenance</span>
+                            </div>
+                        </div>
+                        <div class="room-categories" id="roomCategories">
+                            <!-- Room categories will be loaded dynamically -->
+                        </div>
+                        <div id="roomSelectionMessage" class="room-selection-message hidden">
+                            <div style="text-align: center; padding: 40px; color: #6c757d;">
+                                <i class="ri-hotel-bed-line" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                                <h3>No Rooms Available</h3>
+                                <p>Please contact us for room availability.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Booking Details -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="ri-calendar-line"></i>
+                        <h3>Booking Details</h3>
+                    </div>
+                    
+                    <!-- Regular Service Booking Details -->
+                    <div id="regularBookingDetails" class="booking-details">
+                        <div class="form-group">
+                            <label for="bookingDate">Select Date</label>
+                            <input type="date" id="bookingDate" name="bookingDate" required onchange="loadAvailableTimeSlots(); startAvailabilityRefresh();">
+                        </div>
+                        <div class="form-group">
+                            <label>Select Time</label>
+                            <div class="time-slots" id="timeSlots">
+                                <!-- Time slots will be loaded dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cat Hotel Booking Details -->
+                    <div id="catHotelBookingDetails" class="booking-details" style="display: none;">
+                        <div class="form-group">
+                            <label for="checkinDate">Check-in Date</label>
+                            <input type="date" id="checkinDate" name="checkinDate" required onchange="updateCatHotelPrice()">
+                        </div>
+                        <div class="form-group">
+                            <label for="checkinTime">Check-in Time</label>
+                            <select id="checkinTime" name="checkinTime" required onchange="updateCatHotelPrice()">
+                                <option value="" disabled selected>Select Check-in Time</option>
+                                <option value="10:00 AM">10:00 AM</option>
+                                <option value="11:00 AM">11:00 AM</option>
+                                <option value="12:00 PM">12:00 PM</option>
+                                <option value="1:00 PM">1:00 PM</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="checkoutDate">Check-out Date</label>
+                            <input type="date" id="checkoutDate" name="checkoutDate" required onchange="updateCatHotelPrice()">
+                        </div>
+                        <div class="form-group">
+                            <label for="checkoutTime">Check-out Time</label>
+                            <select id="checkoutTime" name="checkoutTime" required onchange="updateCatHotelPrice()">
+                                <option value="" disabled selected>Select Check-out Time</option>
+                                <option value="10:00 AM">10:00 AM</option>
+                                <option value="11:00 AM">11:00 AM</option>
+                                <option value="12:00 PM">12:00 PM</option>
+                                <option value="1:00 PM">1:00 PM</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Stay Duration</label>
+                            <div id="stayDuration" class="stay-duration-display">
+                                <span id="nightsCount">0 nights</span>
+                                <span id="nightsBreakdown" class="nights-breakdown"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Total Payment -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="ri-money-dollar-circle-line"></i>
+                        <h3>Total Payment</h3>
+                    </div>
+                    <div id="servicePrice" class="price-display hidden">
+                        <div class="price-info">
+                            <div class="price-pet-info">
+                                <i class="ri-paw-print-line"></i>
+                                <span id="petCategoryWeight">Pet Category & Weight</span>
+                            </div>
+                            <div class="price-amount">
+                                <i class="ri-money-dollar-circle-line"></i>
+                                <span id="priceAmount">RM 0.00</span>
+                            </div>
+                            <div id="priceBreakdown" class="price-breakdown" style="display:none;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Payment Method -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="ri-bank-card-line"></i>
+                        <h3>Payment Method</h3>
+                    </div>
+                    <div class="payment-methods">
+                        <!-- Online Transfer -->
+                        <div class="payment-option" style="position: relative;" onclick="selectPaymentMethod('transfer')">
+                            <div class="payment-header">
+                                <i class="ri-exchange-line"></i>
+                                <h4>Online Transfer</h4>
+                            </div>
+                            <div class="bank-info">
+                                <div><strong>Bank:</strong> Maybank</div>
+                                <div><strong>Account Name:</strong> Catswell Pet Care</div>
+                                <div><strong>Account Number:</strong> 1234567890</div>
+                                <div><strong>Reference:</strong> <span id="transferReference">BOOK-2025-001</span></div>
+                            </div>
+                        </div>
+
+                        <!-- QR Payment -->
+                        <div class="payment-option" style="position: relative;" onclick="selectPaymentMethod('Qr Payment')">
+                            <div class="payment-header">
+                                <i class="ri-qr-code-line"></i>
+                                <h4>QR Payment</h4>
+                            </div>
+                            <div class="qr-code">
+                                <div style="width: 200px; height: 200px; background: #ffffff; border: 2px solid #dee2e6; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto; padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                    <img src="assets/qr_payment.jpg" alt="QR Payment Code" style="width: 100%; height: 100%; object-fit: contain; border-radius: 5px;">
+                                </div>
+                            </div>
+                            <div class="bank-info">
+                                <div><strong>Bank:</strong> Maybank</div>
+                                <div><strong>Account Name:</strong> Catswell Pet Care</div>
+                                <div><strong>Account Number:</strong> 1234567890</div>
+                                <div><strong>Reference:</strong> <span id="qrReference">BOOK-2025-001</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Receipt Upload Section (appears after payment method selection) -->
+                    <div id="receiptUploadSection" class="receipt-upload-section hidden">
+                        <div class="section-title">
+                            <i class="ri-file-upload-line"></i>
+                            <h3>Upload Payment Receipt</h3>
+                        </div>
+                        <div class="receipt-upload-area" id="receiptUploadArea">
+                            <div class="receipt-upload-content">
+                                <i class="ri-cloud-upload-line"></i>
+                                <p>Drag & drop receipt here or <span class="receipt-upload-link">browse files</span></p>
+                                <small>Supports: JPG, PNG, GIF, PDF (Max 5MB)</small>
+                            </div>
+                            <input type="file" id="paymentReceiptUpload" accept="image/*,.pdf" style="display: none;">
+                        </div>
+                        <div id="receiptPreview" class="receipt-preview enhanced-preview" style="display: none;">
+                            <div class="preview-container">
+                                <img id="receiptPreviewImg" src="" alt="Receipt Preview" style="display: none;">
+                                <div id="receiptFileIcon" class="file-icon" style="display: none;">
+                                    <i class="ri-file-pdf-line"></i>
+                                </div>
+                                <div class="preview-overlay">
+                                    <button type="button" onclick="removeReceipt()" class="remove-receipt-btn">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </button>
+                                    <button type="button" onclick="changeReceipt()" class="change-receipt-btn">
+                                        <i class="ri-edit-line"></i>
+                                    </button>
+                                    <button type="button" onclick="viewReceipt()" class="view-receipt-btn" id="viewReceiptBtn" style="display: none;">
+                                        <i class="ri-eye-line"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="receipt-info">
+                                <span id="receiptFileName"></span>
+                                <span id="receiptFileSize"></span>
+                            </div>
+                        </div>
+                        <div id="paymentReceiptStatus" class="hidden" style="margin-top: 10px; font-size: 0.9rem;"></div>
+                    </div>
+                </div>
+
+                <!-- 8. Additional Notes -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="ri-file-text-line"></i>
+                        <h3>Additional Notes</h3>
+                    </div>
+                    <div class="notes-section">
+                        <textarea 
+                            id="additionalNotes" 
+                            name="additionalNotes" 
+                            placeholder="Any special requests or information about your pet..."
+                            rows="4"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-back" onclick="goBack()">
+                        <i class="ri-arrow-left-line"></i>
+                        Back to Services
+                    </button>
+                    <button type="button" class="btn btn-cancel" onclick="cancelBooking()">
+                        <i class="ri-close-line"></i>
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-complete" id="completePaymentBtn" disabled>
+                        <i class="ri-check-line"></i>
+                        Complete Payment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="dashboard__footer">
+        <div class="footer__container">
+            <div class="footer__logo">
+                <img src="assets/logo.png" alt="Catswell Logo">
+            </div>
+            <div class="footer__copyright">
+                © 2025 Catswell Pet Care Management. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Include main.js for navigation functionality -->
+    <script src="main.js"></script>
+    
+    <script>
+        // Global variables
+        let selectedPet = null; // kept for backward compatibility (first selected)
+        let selectedPets = [];
+        let selectedService = null;
+        let selectedTimeSlot = null;
+        let selectedPaymentMethod = null;
+        let paymentReceiptUploaded = false;
+        let userData = null;
+        let userPets = [];
+        let availableServices = [];
+        let hotelRoomsData = [];
+        let selectedRoom = null;
+        let nightsCount = 0;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate unique tab session ID (unique per browser tab)
+            let tabSessionId = sessionStorage.getItem('tab_session_id');
+            if (!tabSessionId) {
+                tabSessionId = 'tab_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('tab_session_id', tabSessionId);
+            }
+            
+            // Check login status
+            checkLoginStatus();
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookingDate').min = today;
+            document.getElementById('checkinDate').min = today;
+            document.getElementById('checkoutDate').min = today;
+            
+            // Generate booking reference
+            generateBookingReference();
+            
+            // Load initial data
+            loadCustomerInfo();
+            loadUserPets();
+            loadServiceCategories();
+            loadHotelRooms();
+            
+            // Initialize form validation
+            initializeFormValidation();
+            
+            // Initialize form requirements
+            updateFormRequirements();
+            
+            // Initialize drag and drop for receipt upload
+            initializeReceiptDragDrop();
+        });
+
+
+        // Check login status
+        async function checkLoginStatus() {
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'action=check_login&tab_session_id=' + encodeURIComponent(sessionStorage.getItem('tab_session_id') || '')
+                });
+                
+                const result = await response.json();
+                
+                if (!result.success || !result.logged_in) {
+                    alert('Please log in to book a service.');
+                    window.location.href = 'services.html';
+                    return;
+                }
+                
+                userData = result;
+                
+                // Update welcome button with user's first name
+                updateWelcomeButton(result.first_name);
+            } catch (error) {
+                console.error('Login check failed:', error);
+                alert('Please log in to book a service.');
+                window.location.href = 'services.html';
+            }
+        }
+
+        // Update welcome button with user's first name
+        function updateWelcomeButton(firstName) {
+            const loginItem = document.querySelector('.nav__login-item');
+            if (loginItem) {
+                loginItem.innerHTML = `
+                    <div aria-label="User Profile" tabindex="0" role="button" class="user-profile" style="width:auto;" onclick="window.location.href='cust-dashboard.html'">
+                        <div class="user-profile-inner" style="width:auto; padding:0 12px; white-space:nowrap; max-width:none;">
+                            <i class="ri-user-3-fill"></i>
+                            <span>Welcome, ${firstName || 'User'}</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Load customer information
+        async function loadCustomerInfo() {
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'action=get_current_user&tab_session_id=' + encodeURIComponent(sessionStorage.getItem('tab_session_id') || '')
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.user) {
+                    const user = result.user;
+                    document.getElementById('customerName').textContent = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Not provided';
+                    document.getElementById('customerEmail').textContent = user.email || 'Not provided';
+                    document.getElementById('customerPhone').textContent = user.phone_number || 'Not provided';
+                    document.getElementById('customerAddress').textContent = user.address || 'Not provided';
+                } else {
+                    showError('Failed to load customer information');
+                }
+            } catch (error) {
+                console.error('Error loading customer info:', error);
+                showError('Error loading customer information');
+            }
+        }
+
+        // Load user pets
+        async function loadUserPets() {
+            try {
+                const tabSessionId = sessionStorage.getItem('tab_session_id');
+                
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'action=get_pets&tab_session_id=' + encodeURIComponent(tabSessionId || '')
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && Array.isArray(result.pets)) {
+                    userPets = result.pets;
+                    displayUserPets();
+                } else {
+                    console.error('Failed to load pets:', result.message);
+                    document.getElementById('noPetsMessage').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error loading pets:', error);
+                document.getElementById('noPetsMessage').classList.remove('hidden');
+            }
+        }
+
+        // Format category name for display (normalize casing)
+        function formatCategoryName(category) {
+            if (!category) return 'Unknown';
+            const str = String(category).replace(/_/g, ' ').toLowerCase();
+            return str.replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        // Display user pets
+        function displayUserPets() {
+            const petsGrid = document.getElementById('petsGrid');
+            
+            if (userPets.length === 0) {
+                document.getElementById('noPetsMessage').classList.remove('hidden');
+                return;
+            }
+            
+            // Hide the "No Pets Found" message when pets are found
+            document.getElementById('noPetsMessage').classList.add('hidden');
+            
+            // Clear existing pet cards but keep the noPetsMessage div
+            const existingCards = petsGrid.querySelectorAll('.pet-card');
+            existingCards.forEach(card => card.remove());
+            
+            userPets.forEach(pet => {
+                const petCard = document.createElement('div');
+                petCard.className = 'pet-card';
+                petCard.onclick = (event) => togglePetSelection(pet, petCard);
+                
+                const petImage = pet.photo_path ? 
+                    `<img src="${pet.photo_path}" alt="${pet.name}">` :
+                    `<i class="ri-paw-print-line"></i>`;
+                
+                petCard.innerHTML = `
+                    <div class="pet-image">
+                        ${petImage}
+                    </div>
+                    <div class="pet-name">${pet.name}</div>
+                    <div class="pet-details">
+                        <div><strong>Category:</strong> ${formatCategoryName(pet.pet_category || pet.breed)}</div>
+                        <div><strong>Weight:</strong> ${pet.weight || 'Unknown'}</div>
+                        <div><strong>Age:</strong> ${pet.age || 'Unknown'} years</div>
+                        <div><strong>Vaccine:</strong> <span class="vaccine-status ${(pet.vaccine_status || 'NO').toLowerCase()}">${pet.vaccine_name || (pet.vaccine_status || 'NO')}</span></div>
+                    </div>
+                `;
+                
+                petsGrid.appendChild(petCard);
+            });
+        }
+
+        // Toggle pet selection (multi-select)
+        function togglePetSelection(pet, cardEl) {
+            const index = selectedPets.findIndex(p => p.id === pet.id);
+            if (index >= 0) {
+                selectedPets.splice(index, 1);
+                cardEl.classList.remove('selected');
+            } else {
+                selectedPets.push(pet);
+                cardEl.classList.add('selected');
+            }
+            // Maintain first selected pet for backward compatibility
+            selectedPet = selectedPets[0] || null;
+            updateServicePrice();
+            
+            // Refresh room display based on new pet count (for Cat Hotel services)
+            const serviceCategory = document.getElementById('serviceCategory').value;
+            if (serviceCategory === 'CAT HOTEL') {
+                displayHotelRooms();
+            }
+            
+            validateForm();
+        }
+
+        // Load service categories
+        async function loadServiceCategories() {
+            console.log('Loading service categories...');
+            try {
+                const response = await fetch('pet_services.php?action=list');
+                console.log('Response status:', response.status);
+                const result = await response.json();
+                console.log('API Result:', result);
+                
+                if (result.success && Array.isArray(result.data)) {
+                    availableServices = result.data;
+                    console.log('Available services:', availableServices);
+                    populateServiceCategories();
+                } else {
+                    console.error('API returned error or no data:', result);
+                    // Show error message to user
+                    const categorySelect = document.getElementById('serviceCategory');
+                    if (categorySelect) {
+                        categorySelect.innerHTML = '<option value="" disabled selected>No services available - Click here to setup</option>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading services:', error);
+                // Show error message to user
+                const categorySelect = document.getElementById('serviceCategory');
+                if (categorySelect) {
+                    categorySelect.innerHTML = '<option value="" disabled selected>Error loading services - Click here to setup</option>';
+                }
+            }
+        }
+
+        // Populate service categories
+        function populateServiceCategories() {
+            const categorySelect = document.getElementById('serviceCategory');
+            console.log('Populating service categories...');
+            console.log('Available services:', availableServices);
+            
+            // Clear existing options
+            categorySelect.innerHTML = '<option value="" disabled selected>Select Category</option>';
+            
+            // Define allowed service categories
+            const allowedCategories = [
+                'GROOMING SERVICE',
+                'CAT HOTEL', 
+                'A LA CARTE SERVICE'
+            ];
+            
+            // Filter services to only include allowed categories
+            const filteredServices = availableServices.filter(service => 
+                allowedCategories.includes(service.service_category)
+            );
+            
+            console.log('Filtered services:', filteredServices);
+            
+            // Get unique categories from filtered services
+            const categories = [...new Set(filteredServices.map(service => service.service_category).filter(Boolean))];
+            
+            console.log('Unique categories found:', categories);
+            
+            if (categories.length === 0) {
+                console.warn('No matching categories found!');
+                categorySelect.innerHTML = '<option value="" disabled selected>No matching categories found</option>';
+                return;
+            }
+            
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = formatCategoryName(category);
+                categorySelect.appendChild(option);
+                console.log('Added category option:', category);
+            });
+        }
+
+        // Load services based on category
+        function loadServices() {
+            const category = document.getElementById('serviceCategory').value;
+            const serviceSelect = document.getElementById('serviceName');
+            
+            // Clear existing options
+            serviceSelect.innerHTML = '<option value="" disabled selected>Select Service</option>';
+            
+            // Update form requirements based on category
+            updateFormRequirements();
+            
+            // Toggle room selection based on category
+            toggleRoomSelection();
+            
+            if (!category) return;
+            
+            if (category === 'CAT HOTEL') {
+                // For Cat Hotel, load actual services from database
+                const catHotelServices = availableServices.filter(service => service.service_category === 'CAT HOTEL');
+                
+                if (catHotelServices.length > 0) {
+                    catHotelServices.forEach(service => {
+                        const option = document.createElement('option');
+                        option.value = service.id;
+                        // Replace "Day Care" with "Studio Suite" in service name
+                        const displayName = service.service_name ? service.service_name.replace(/Day Care/gi, 'Studio Suite') : 'Studio Suite';
+                        option.textContent = displayName;
+                        option.dataset.service = JSON.stringify(service);
+                        serviceSelect.appendChild(option);
+                    });
+                } else {
+                    // Fallback to hardcoded services if none in database
+                    const fallbackServices = [
+                        { id: 'classic', name: 'Classic Suite', category: 'classic' },
+                        { id: 'deluxe', name: 'Deluxe Suite', category: 'deluxe' },
+                        { id: 'executive', name: 'Executive Suite', category: 'executive' },
+                        { id: 'daycare', name: 'Studio Suite', category: 'day_care' }
+                    ];
+                    
+                    fallbackServices.forEach(service => {
+                        const option = document.createElement('option');
+                        option.value = service.id;
+                        option.textContent = service.name;
+                        option.dataset.service = JSON.stringify({
+                            id: service.id,
+                            service_name: service.name,
+                            service_category: 'CAT HOTEL',
+                            room_category: service.category,
+                            price: 0, // Will be calculated based on room availability
+                            price_data: null
+                        });
+                        serviceSelect.appendChild(option);
+                    });
+                }
+                
+                // Room selection will be shown when user selects a specific service
+            } else {
+                // For other categories, use the existing logic
+                const allowedCategories = [
+                    'GROOMING SERVICE',
+                    'CAT HOTEL',
+                    'A LA CARTE SERVICE'
+                ];
+                
+                // Filter services to only include allowed categories
+                const filteredServices = availableServices.filter(service => 
+                    allowedCategories.includes(service.service_category)
+                );
+                
+                // Filter services by selected category
+                const categoryServices = filteredServices.filter(service => service.service_category === category);
+                
+                categoryServices.forEach(service => {
+                    const option = document.createElement('option');
+                    option.value = service.id;
+                    // Replace "Day Care" with "Studio Suite" in service name
+                    const displayName = service.service_name ? service.service_name.replace(/Day Care/gi, 'Studio Suite') : service.service_name;
+                    option.textContent = displayName;
+                    option.dataset.service = JSON.stringify(service);
+                    serviceSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Load hotel rooms
+        async function loadHotelRooms() {
+            try {
+                const response = await fetch('hotel_rooms.php?action=list');
+                const result = await response.json();
+                
+                if (result.success && Array.isArray(result.data)) {
+                    hotelRoomsData = result.data;
+                    console.log('Hotel rooms loaded:', hotelRoomsData);
+                } else {
+                    console.error('Failed to load hotel rooms:', result.message);
+                    hotelRoomsData = [];
+                }
+            } catch (error) {
+                console.error('Error loading hotel rooms:', error);
+                hotelRoomsData = [];
+            }
+        }
+
+        // Show/hide room selection section based on service category
+        function toggleRoomSelection() {
+            const roomSection = document.getElementById('roomSelectionSection');
+            const regularBookingDetails = document.getElementById('regularBookingDetails');
+            const catHotelBookingDetails = document.getElementById('catHotelBookingDetails');
+            const serviceCategory = document.getElementById('serviceCategory').value;
+            const serviceName = document.getElementById('serviceName').value;
+            
+            if (serviceCategory === 'CAT HOTEL') {
+                // Only show room selection if a specific service name is selected
+                if (serviceName) {
+                    roomSection.style.display = 'block';
+                    displayHotelRooms();
+                } else {
+                    roomSection.style.display = 'none';
+                }
+                regularBookingDetails.style.display = 'none';
+                catHotelBookingDetails.style.display = 'grid';
+            } else {
+                roomSection.style.display = 'none';
+                regularBookingDetails.style.display = 'grid';
+                catHotelBookingDetails.style.display = 'none';
+                selectedRoom = null;
+                nightsCount = 0;
+                validateForm();
+            }
+        }
+
+        // Display hotel rooms grouped by category
+        function displayHotelRooms() {
+            const roomCategoriesContainer = document.getElementById('roomCategories');
+            const roomSelectionMessage = document.getElementById('roomSelectionMessage');
+            const serviceSelect = document.getElementById('serviceName');
+            
+            if (hotelRoomsData.length === 0) {
+                roomCategoriesContainer.innerHTML = '';
+                roomSelectionMessage.classList.remove('hidden');
+                return;
+            }
+            
+            roomSelectionMessage.classList.add('hidden');
+            
+            // Map database cat_hotel_category values to room categories
+            // Note: Rooms from hotel_rooms.php use 'day_care' for Studio Suite (category_id = 4)
+            const categoryMapping = {
+                'classic_suite': 'classic',
+                'deluxe_suite': 'deluxe', 
+                'executive_suite': 'executive',
+                'day_care': 'day_care',      // Service category maps to room category
+                'studio_suite': 'day_care'   // Service category maps to room category (rooms use 'day_care')
+            };
+            
+            // Get selected service to filter rooms
+            let selectedRoomCategory = null;
+            if (serviceSelect.value) {
+                const serviceData = JSON.parse(serviceSelect.options[serviceSelect.selectedIndex].dataset.service);
+                // Handle both database service structure (cat_hotel_category) and fallback structure (room_category)
+                const rawCategory = serviceData.cat_hotel_category || serviceData.room_category;
+                // Map database category names to room category names
+                selectedRoomCategory = categoryMapping[rawCategory] || rawCategory;
+            }
+            
+            // Group rooms by category
+            const categoryMap = {
+                'classic': { label: 'Classic Suite', icon: 'ri-home-line', rooms: [], minPets: 1, maxPets: 2 },
+                'deluxe': { label: 'Deluxe Suite', icon: 'ri-home-2-line', rooms: [], minPets: 3, maxPets: 4 },
+                'executive': { label: 'Executive Suite', icon: 'ri-building-line', rooms: [], minPets: 5, maxPets: 7 },
+                'day_care': { label: 'Studio Suite', icon: 'ri-sun-line', rooms: [], minPets: 1, maxPets: 1 },
+                'studio_suite': { label: 'Studio Suite', icon: 'ri-sun-line', rooms: [], minPets: 1, maxPets: 1 }
+            };
+            
+            // Group rooms by category
+            hotelRoomsData.forEach(room => {
+                if (categoryMap[room.category]) {
+                    categoryMap[room.category].rooms.push(room);
+                }
+            });
+            
+            // Render categories with rooms
+            roomCategoriesContainer.innerHTML = '';
+            
+            // Get selected pets count
+            const numberOfPets = selectedPets.length;
+            
+            Object.entries(categoryMap).forEach(([key, category]) => {
+                // Only show the selected room category if a service is selected
+                if (selectedRoomCategory && key !== selectedRoomCategory) {
+                    return;
+                }
+                
+                // Filter rooms based on pet capacity - only show suitable room types
+                if (numberOfPets > 0) {
+                    if (numberOfPets < category.minPets || numberOfPets > category.maxPets) {
+                        return; // Skip this room category as it doesn't fit the pet count
+                    }
+                }
+                
+                if (category.rooms.length > 0) {
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'room-category';
+                    
+                    const roomGrid = category.rooms.map(room => `
+                        <div class="room-card ${room.status}" onclick="selectRoom('${room.id}', this)" ${room.status !== 'available' ? 'title="Room not available"' : ''}>
+                            <span class="room-id">${room.displayId}</span>
+                            <span class="room-capacity">${room.occupants > 0 ? `${room.occupants} ${room.occupants === 1 ? 'cat' : 'cats'}` : ''}</span>
+                            ${room.note ? `<span class="room-note" title="${room.note}">${room.note}</span>` : ''}
+                        </div>
+                    `).join('');
+                    
+                    categoryDiv.innerHTML = `
+                        <div class="room-category-title">
+                            <i class="${category.icon}"></i>
+                            <span>${category.label} (${category.rooms.length} Total)</span>
+                        </div>
+                        <div class="room-grid">
+                            ${roomGrid}
+                        </div>
+                    `;
+                    
+                    roomCategoriesContainer.appendChild(categoryDiv);
+                }
+            });
+            
+            // If no rooms match the selected category, show message
+            if (selectedRoomCategory && !roomCategoriesContainer.hasChildNodes()) {
+                let messageText = '';
+                // Get the actual category (handle studio_suite -> day_care mapping)
+                const actualCategoryKey = (selectedRoomCategory === 'studio_suite' || selectedRoomCategory === 'day_care') ? 'day_care' : selectedRoomCategory;
+                const category = categoryMap[actualCategoryKey] || categoryMap[selectedRoomCategory];
+                
+                if (numberOfPets > 0) {
+                    if (category) {
+                        if (numberOfPets < category.minPets) {
+                            messageText = `This room type requires at least ${category.minPets} pet${category.minPets > 1 ? 's' : ''}.`;
+                        } else if (numberOfPets > category.maxPets) {
+                            messageText = `This room type can accommodate up to ${category.maxPets} pet${category.maxPets > 1 ? 's' : ''}. Please select a larger room type.`;
+                        } else {
+                            messageText = 'No rooms of this type are currently available.';
+                        }
+                    } else {
+                        messageText = 'No rooms available for this category.';
+                    }
+                } else {
+                    messageText = 'Please select a different room type or contact us for availability.';
+                }
+                
+                roomCategoriesContainer.innerHTML = `
+                    <div class="room-selection-message">
+                        <div style="text-align: center; padding: 40px; color: #6c757d;">
+                            <i class="ri-hotel-bed-line" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                            <h3>No ${category?.label || categoryMap[selectedRoomCategory]?.label || 'Studio Suite'} Available</h3>
+                            <p>${messageText}</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Select room
+        function selectRoom(roomId, cardEl) {
+            const room = hotelRoomsData.find(r => r.id === roomId);
+            if (!room || room.status !== 'available') return;
+            
+            // Remove previous selection
+            document.querySelectorAll('.room-card.selected').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selection to clicked card
+            cardEl.classList.add('selected');
+            selectedRoom = room;
+            
+            validateForm();
+        }
+
+        // Update Cat Hotel pricing based on nights
+        function updateCatHotelPrice() {
+            const checkinDate = document.getElementById('checkinDate').value;
+            const checkoutDate = document.getElementById('checkoutDate').value;
+            const checkinTime = document.getElementById('checkinTime').value;
+            const checkoutTime = document.getElementById('checkoutTime').value;
+            
+            if (!checkinDate || !checkoutDate || !checkinTime || !checkoutTime) {
+                nightsCount = 0;
+                updateNightsDisplay();
+                updateServicePrice();
+                return;
+            }
+            
+            // Calculate nights
+            const checkin = new Date(checkinDate + ' ' + checkinTime);
+            const checkout = new Date(checkoutDate + ' ' + checkoutTime);
+            
+            if (checkout <= checkin) {
+                nightsCount = 0;
+                updateNightsDisplay();
+                updateServicePrice();
+                return;
+            }
+            
+            // Calculate difference in days
+            const timeDiff = checkout.getTime() - checkin.getTime();
+            nightsCount = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            
+            updateNightsDisplay();
+            updateServicePrice();
+        }
+        
+        // Update nights display
+        function updateNightsDisplay() {
+            const nightsCountEl = document.getElementById('nightsCount');
+            const nightsBreakdownEl = document.getElementById('nightsBreakdown');
+            
+            if (nightsCount <= 0) {
+                nightsCountEl.textContent = '0 nights';
+                nightsBreakdownEl.textContent = '';
+                nightsBreakdownEl.classList.add('hidden');
+            } else {
+                nightsCountEl.textContent = `${nightsCount} ${nightsCount === 1 ? 'night' : 'nights'}`;
+                
+                const checkinDate = document.getElementById('checkinDate').value;
+                const checkoutDate = document.getElementById('checkoutDate').value;
+                
+                if (checkinDate && checkoutDate) {
+                    const checkin = new Date(checkinDate);
+                    const checkout = new Date(checkoutDate);
+                    
+                    nightsBreakdownEl.textContent = `${checkin.toLocaleDateString()} - ${checkout.toLocaleDateString()}`;
+                    nightsBreakdownEl.classList.remove('hidden');
+                } else {
+                    nightsBreakdownEl.classList.add('hidden');
+                }
+            }
+        }
+
+        // Update service price (supports multiple pets)
+        function updateServicePrice() {
+            const serviceSelect = document.getElementById('serviceName');
+            const priceDisplay = document.getElementById('servicePrice');
+            const priceAmount = document.getElementById('priceAmount');
+            const petCategoryWeight = document.getElementById('petCategoryWeight');
+            const breakdownEl = document.getElementById('priceBreakdown');
+            
+            if (!serviceSelect.value || selectedPets.length === 0) {
+                priceDisplay.classList.add('hidden');
+                if (breakdownEl) { breakdownEl.style.display = 'none'; breakdownEl.innerHTML = ''; }
+                return;
+            }
+            
+            const serviceData = JSON.parse(serviceSelect.options[serviceSelect.selectedIndex].dataset.service);
+            selectedService = serviceData;
+            
+            // Calculate total price across selected pets
+            let totalPrice = 0;
+            const grouped = new Map(); // key -> { label, count, total }
+            for (const pet of selectedPets) {
+                const { price, matched } = calculateServicePriceWithMatch(serviceData, pet);
+                
+                // For Cat Hotel services, multiply by number of nights
+                let petPrice = price;
+                if (serviceData.service_category === 'CAT HOTEL' && nightsCount > 0) {
+                    petPrice = price * nightsCount;
+                }
+                
+                totalPrice += petPrice;
+                if (matched && matched.multiplePricing) {
+                    const cat = matched.categoryDisplay;
+                    let weight = matched.weightDisplay;
+                    // Add KG unit if weight exists and doesn't already contain it
+                    if (weight && !weight.toUpperCase().includes('KG')) {
+                        weight = weight + ' KG';
+                    }
+                    const baseLabel = `Pet Category: ${cat}${weight ? ` (${weight})` : ''}`;
+                    const key = `${cat}|${weight || ''}`;
+                    if (!grouped.has(key)) {
+                        grouped.set(key, { label: baseLabel, count: 1, total: petPrice });
+                    } else {
+                        const g = grouped.get(key);
+                        g.count += 1;
+                        g.total += petPrice;
+                    }
+                }
+            }
+            
+            // Display summary
+            let summaryText = `${selectedPets.length} pet(s) selected`;
+            if (serviceData.service_category === 'CAT HOTEL' && nightsCount > 0) {
+                summaryText += ` × ${nightsCount} ${nightsCount === 1 ? 'night' : 'nights'}`;
+            }
+            petCategoryWeight.textContent = summaryText;
+            priceAmount.textContent = `RM ${totalPrice.toFixed(2)}`;
+            priceDisplay.classList.remove('hidden');
+            
+            // Render breakdown only if we had multiple price matches for any pet
+            const breakdownItems = Array.from(grouped.values()).map(g => ({
+                label: g.count > 1 ? `${g.label} x${g.count}` : g.label,
+                price: `RM ${g.total.toFixed(2)}`
+            }));
+            if (breakdownItems.length > 0) {
+                breakdownEl.style.display = 'block';
+                breakdownEl.innerHTML = breakdownItems.map(item => `
+                    <div class="price-breakdown-item">
+                        <div>${item.label}</div>
+                        <div><strong>${item.price}</strong></div>
+                    </div>
+                `).join('');
+            } else {
+                breakdownEl.style.display = 'none';
+                breakdownEl.innerHTML = '';
+            }
+            
+            // Update room display for Cat Hotel services
+            const serviceCategory = document.getElementById('serviceCategory').value;
+            if (serviceCategory === 'CAT HOTEL') {
+                // Only refresh room display if no rooms are currently shown
+                const roomSection = document.getElementById('roomSelectionSection');
+                const roomCategoriesContainer = document.getElementById('roomCategories');
+                if (roomSection.style.display === 'block' && !roomCategoriesContainer.hasChildNodes()) {
+                    displayHotelRooms();
+                }
+            }
+            
+            validateForm();
+        }
+
+        // Calculate service price (original helper retained via wrapper)
+        function calculateServicePrice(service, pet) {
+            const { price } = calculateServicePriceWithMatch(service, pet);
+            return price;
+        }
+
+        // Calculate price and return match metadata to support breakdown display
+        function calculateServicePriceWithMatch(service, pet) {
+            // Parse price data if it's JSON
+            let priceData = service.price_data;
+            if (typeof priceData === 'string') {
+                try {
+                    priceData = JSON.parse(priceData);
+                } catch (e) {
+                    console.error('Error parsing price_data:', e);
+                    return { price: parseFloat(service.price) || 0, matched: null };
+                }
+            }
+            
+            // If no price data, use base price
+            if (!priceData || !Array.isArray(priceData)) {
+                return { price: parseFloat(service.price) || 0, matched: null };
+            }
+            
+            // Find matching price based on pet category and weight
+            const petCategory = pet.pet_category || pet.breed || 'general';
+            const petWeight = parseFloat(pet.weight) || 0;
+            
+            let weightSpecificPrice = null;
+            let generalPrice = null;
+            
+            // First pass: Look for weight-specific prices (more specific)
+            for (let priceInfo of priceData) {
+                if (priceInfo.category === petCategory && priceInfo.weight) {
+                    const weightRange = priceInfo.weight.toString();
+                    
+                    // Check weight range
+                    if (weightRange.includes('-')) {
+                        const [minWeight, maxWeight] = weightRange.split('-').map(w => parseFloat(w.trim()));
+                        if (petWeight >= minWeight && petWeight <= maxWeight) {
+                            // Add KG unit to weight display
+                            const weightDisplay = weightRange.includes('KG') || weightRange.includes('kg') ? weightRange : weightRange + ' KG';
+                            weightSpecificPrice = { price: parseFloat(priceInfo.price) || 0, matched: { multiplePricing: true, categoryDisplay: formatCategoryName(petCategory), weightDisplay: weightDisplay } };
+                            break; // Use the first matching weight-specific price
+                        }
+                    } else if (weightRange.endsWith('+')) {
+                        // Handle "10+" format
+                        const minWeight = parseFloat(weightRange.replace('+', '').trim());
+                        if (petWeight >= minWeight) {
+                            // Add KG unit to weight display
+                            const weightDisplay = weightRange.includes('KG') || weightRange.includes('kg') ? weightRange : weightRange + ' KG';
+                            weightSpecificPrice = { price: parseFloat(priceInfo.price) || 0, matched: { multiplePricing: true, categoryDisplay: formatCategoryName(petCategory), weightDisplay: weightDisplay } };
+                            break;
+                        }
+                    } else if (!isNaN(parseFloat(weightRange)) && parseFloat(weightRange) === petWeight) {
+                        // Add KG unit to weight display
+                        const weightDisplay = weightRange.includes('KG') || weightRange.includes('kg') ? weightRange : weightRange + ' KG';
+                        weightSpecificPrice = { price: parseFloat(priceInfo.price) || 0, matched: { multiplePricing: true, categoryDisplay: formatCategoryName(petCategory), weightDisplay: weightDisplay } };
+                        break;
+                    }
+                }
+            }
+            
+            // If we found a weight-specific price, use it
+            if (weightSpecificPrice) {
+                return weightSpecificPrice;
+            }
+            
+            // Second pass: Look for general category price (without weight specification)
+            for (let priceInfo of priceData) {
+                if (priceInfo.category === petCategory && !priceInfo.weight) {
+                    generalPrice = { price: parseFloat(priceInfo.price) || 0, matched: { multiplePricing: priceData.length > 1, categoryDisplay: formatCategoryName(petCategory), weightDisplay: '' } };
+                    break; // Use the first general price found
+                }
+            }
+            
+            // If we found a general price, use it
+            if (generalPrice) {
+                return generalPrice;
+            }
+            
+            // Fallback to first available price or base price
+            if (priceData.length > 0) {
+                const fallback = parseFloat(priceData[0].price) || parseFloat(service.price) || 0;
+                return { price: fallback, matched: priceData.length > 1 ? { multiplePricing: true, categoryDisplay: formatCategoryName(petCategory), weightDisplay: '' } : null };
+            }
+            
+            return { price: parseFloat(service.price) || 0, matched: null };
+        }
+
+        // Load available time slots
+        async function loadAvailableTimeSlots() {
+            const date = document.getElementById('bookingDate').value;
+            const timeSlotsContainer = document.getElementById('timeSlots');
+            
+            if (!date) {
+                timeSlotsContainer.innerHTML = '';
+                return;
+            }
+            
+            // Get selected service
+            const serviceSelect = document.getElementById('serviceName');
+            const selectedServiceId = serviceSelect.value;
+            
+            if (!selectedServiceId) {
+                timeSlotsContainer.innerHTML = '<div class="no-time-slots">Please select a service first</div>';
+                return;
+            }
+            
+            // Find the selected service from available services
+            const selectedService = availableServices.find(service => service.id == selectedServiceId);
+            
+            if (!selectedService) {
+                timeSlotsContainer.innerHTML = '<div class="no-time-slots">Service not found</div>';
+                return;
+            }
+            
+            // Show loading state
+            timeSlotsContainer.innerHTML = '<div class="no-time-slots">Loading available slots...</div>';
+            
+            try {
+                // Fetch real-time availability from API
+                const response = await fetch(`pet_services.php?action=check_availability&service_id=${selectedServiceId}&booking_date=${date}`);
+                const result = await response.json();
+                
+                if (!result.success || !result.availability) {
+                    // Fallback to static capacity if API fails
+                    loadFallbackTimeSlots(selectedService, timeSlotsContainer);
+                    return;
+                }
+                
+                const availability = result.availability;
+                timeSlotsContainer.innerHTML = '';
+                
+                if (Object.keys(availability).length === 0) {
+                    timeSlotsContainer.innerHTML = '<div class="no-time-slots">No time slots available for this service</div>';
+                    return;
+                }
+                
+                // Display time slots with real availability
+                Object.keys(availability).forEach(timeSlot => {
+                    const slotInfo = availability[timeSlot];
+                    const slot = document.createElement('div');
+                    slot.className = 'time-slot';
+                    
+                    // Disable slot if full
+                    if (slotInfo.full) {
+                        slot.classList.add('disabled');
+                    }
+                    
+                    // Create slot content with real availability info
+                    const slotContent = document.createElement('div');
+                    slotContent.className = 'slot-content';
+                    
+                    const timeLabel = document.createElement('div');
+                    timeLabel.className = 'slot-time';
+                    timeLabel.textContent = timeSlot;
+                    
+                    const capacityLabel = document.createElement('div');
+                    capacityLabel.className = 'slot-capacity';
+                    
+                    if (slotInfo.full) {
+                        capacityLabel.textContent = 'Fully booked';
+                        capacityLabel.style.color = '#dc3545';
+                    } else {
+                        capacityLabel.textContent = `${slotInfo.available} of ${slotInfo.max_capacity} bookings available`;
+                    }
+                    
+                    slotContent.appendChild(timeLabel);
+                    slotContent.appendChild(capacityLabel);
+                    slot.appendChild(slotContent);
+                    
+                    slot.onclick = () => {
+                        if (!slot.classList.contains('disabled')) {
+                            selectTimeSlot(slot, timeSlot);
+                        }
+                    };
+                    
+                    timeSlotsContainer.appendChild(slot);
+                });
+                
+            } catch (error) {
+                console.error('Error fetching availability:', error);
+                // Fallback to static capacity if API fails
+                loadFallbackTimeSlots(selectedService, timeSlotsContainer);
+            }
+        }
+        
+        // Auto-refresh availability every 10 seconds
+        let availabilityRefreshInterval = null;
+        
+        function startAvailabilityRefresh() {
+            // Clear existing interval if any
+            if (availabilityRefreshInterval) {
+                clearInterval(availabilityRefreshInterval);
+            }
+            
+            // Only start refresh if service and date are selected
+            const serviceSelect = document.getElementById('serviceName');
+            const dateInput = document.getElementById('bookingDate');
+            
+            if (serviceSelect && dateInput && serviceSelect.value && dateInput.value) {
+                // Refresh availability every 10 seconds
+                availabilityRefreshInterval = setInterval(() => {
+                    // Only refresh if user is still on the page and form is filled
+                    if (serviceSelect.value && dateInput.value && !document.hidden) {
+                        loadAvailableTimeSlots();
+                    }
+                }, 10000); // 10 seconds
+            }
+        }
+        
+        function stopAvailabilityRefresh() {
+            if (availabilityRefreshInterval) {
+                clearInterval(availabilityRefreshInterval);
+                availabilityRefreshInterval = null;
+            }
+        }
+        
+        // Fallback function to load time slots with static capacity
+        function loadFallbackTimeSlots(selectedService, timeSlotsContainer) {
+            let availableTimeSlots = {};
+            if (selectedService.available_time_slots) {
+                try {
+                    if (typeof selectedService.available_time_slots === 'string') {
+                        availableTimeSlots = JSON.parse(selectedService.available_time_slots);
+                    } else if (typeof selectedService.available_time_slots === 'object') {
+                        availableTimeSlots = selectedService.available_time_slots;
+                    }
+                } catch (e) {
+                    console.error('Error parsing available time slots:', e);
+                    availableTimeSlots = {
+                        '10:30 AM': 2, '11:00 AM': 2, '12:00 PM': 2, '1:00 PM': 2,
+                        '2:00 PM': 2, '2:30 PM': 2, '3:30 PM': 2, '4:00 PM': 2
+                    };
+                }
+            } else {
+                availableTimeSlots = {
+                    '10:30 AM': 2, '11:00 AM': 2, '12:00 PM': 2, '1:00 PM': 2,
+                    '2:00 PM': 2, '2:30 PM': 2, '3:30 PM': 2, '4:00 PM': 2
+                };
+            }
+            
+            timeSlotsContainer.innerHTML = '';
+            
+            Object.keys(availableTimeSlots).forEach(timeSlot => {
+                const slot = document.createElement('div');
+                slot.className = 'time-slot';
+                
+                const slotContent = document.createElement('div');
+                slotContent.className = 'slot-content';
+                
+                const timeLabel = document.createElement('div');
+                timeLabel.className = 'slot-time';
+                timeLabel.textContent = timeSlot;
+                
+                const capacityLabel = document.createElement('div');
+                capacityLabel.className = 'slot-capacity';
+                capacityLabel.textContent = `${availableTimeSlots[timeSlot]} slots available`;
+                
+                slotContent.appendChild(timeLabel);
+                slotContent.appendChild(capacityLabel);
+                slot.appendChild(slotContent);
+                
+                slot.onclick = () => selectTimeSlot(slot, timeSlot);
+                
+                timeSlotsContainer.appendChild(slot);
+            });
+        }
+
+        // Select time slot
+        function selectTimeSlot(slot, time) {
+            if (slot.classList.contains('disabled')) return;
+            
+            // Remove previous selection
+            document.querySelectorAll('.time-slot').forEach(s => {
+                s.classList.remove('selected');
+            });
+            
+            // Add selection to clicked slot
+            slot.classList.add('selected');
+            selectedTimeSlot = time;
+            
+            validateForm();
+        }
+
+        // Select/Toggle payment method
+        function selectPaymentMethod(method) {
+            const clicked = event.currentTarget;
+            const receiptUploadSection = document.getElementById('receiptUploadSection');
+            const receiptStatus = document.getElementById('paymentReceiptStatus');
+
+            // If clicking the same selected option, untick it
+            if (clicked.classList.contains('selected')) {
+                clicked.classList.remove('selected');
+                selectedPaymentMethod = null;
+                if (receiptUploadSection) receiptUploadSection.classList.add('hidden');
+                if (receiptStatus) receiptStatus.classList.add('hidden');
+                validateForm();
+                return;
+            }
+
+            // Otherwise, clear others and select this one
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            clicked.classList.add('selected');
+            selectedPaymentMethod = method;
+
+            // Show receipt upload section
+            if (receiptUploadSection) receiptUploadSection.classList.remove('hidden');
+
+            // Update receipt status if already uploaded
+            if (receiptStatus) {
+                if (paymentReceiptUploaded) {
+                    receiptStatus.innerHTML = '<span style="color: #28a745;">✓ Receipt uploaded</span>';
+                    receiptStatus.classList.remove('hidden');
+                } else {
+                    receiptStatus.innerHTML = '<span style="color: #dc3545;">⚠️ Receipt upload required</span>';
+                    receiptStatus.classList.remove('hidden');
+                }
+            }
+            
+            validateForm();
+        }
+
+        // Handle payment receipt upload (legacy function - now handled by handleReceiptFile)
+        function handlePaymentReceiptUpload() {
+            const fileInput = document.getElementById('paymentReceiptUpload');
+            if (fileInput.files.length > 0) {
+                handleReceiptFile(fileInput.files[0]);
+            }
+        }
+
+        // Initialize enhanced receipt upload functionality
+        function initializeReceiptDragDrop() {
+            const uploadArea = document.getElementById('receiptUploadArea');
+            const fileInput = document.getElementById('paymentReceiptUpload');
+            const uploadLink = uploadArea.querySelector('.receipt-upload-link');
+
+            // Handle click on "browse files" link
+            if (uploadLink) {
+                uploadLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    fileInput.click();
+                });
+            }
+
+            // Handle click on upload area (but not on the link)
+            uploadArea.addEventListener('click', (e) => {
+                // Only trigger if not clicking on the upload link
+                if (e.target !== uploadLink && !uploadLink.contains(e.target)) {
+                    fileInput.click();
+                }
+            });
+
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleReceiptFile(files[0]);
+                }
+            });
+
+            // File input change
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleReceiptFile(e.target.files[0]);
+                }
+            });
+        }
+
+        // Handle receipt file upload with enhanced preview
+        function handleReceiptFile(file) {
+            const receiptStatus = document.getElementById('paymentReceiptStatus');
+            
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+            if (!allowedTypes.includes(file.type)) {
+                receiptStatus.innerHTML = '<span style="color: #dc3545;">❌ Invalid file type. Please upload JPG, PNG, GIF, or PDF.</span>';
+                receiptStatus.classList.remove('hidden');
+                return;
+            }
+            
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                receiptStatus.innerHTML = '<span style="color: #dc3545;">❌ File too large. Please upload a file under 5MB.</span>';
+                receiptStatus.classList.remove('hidden');
+                return;
+            }
+            
+            // Clear any previous errors
+            receiptStatus.classList.add('hidden');
+            
+            // Show preview
+            showReceiptPreview(file);
+            
+            // Mark as uploaded
+            paymentReceiptUploaded = true;
+            validateForm();
+        }
+
+        // Show receipt preview
+        function showReceiptPreview(file) {
+            const uploadArea = document.getElementById('receiptUploadArea');
+            const preview = document.getElementById('receiptPreview');
+            const previewImg = document.getElementById('receiptPreviewImg');
+            const fileIcon = document.getElementById('receiptFileIcon');
+            const fileName = document.getElementById('receiptFileName');
+            const fileSize = document.getElementById('receiptFileSize');
+            const viewBtn = document.getElementById('viewReceiptBtn');
+            
+            // Hide upload area and show preview
+            uploadArea.style.display = 'none';
+            preview.style.display = 'block';
+            
+            // Set file info
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            
+            // Show appropriate preview based on file type
+            if (file.type.startsWith('image/')) {
+                // Show image preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                    fileIcon.style.display = 'none';
+                    viewBtn.style.display = 'none'; // Hide view button for images
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Show PDF icon
+                previewImg.style.display = 'none';
+                fileIcon.style.display = 'flex';
+                fileIcon.innerHTML = '<i class="ri-file-pdf-line"></i>';
+                viewBtn.style.display = 'flex'; // Show view button for PDFs
+            }
+        }
+
+        // Remove receipt
+        function removeReceipt() {
+            const uploadArea = document.getElementById('receiptUploadArea');
+            const preview = document.getElementById('receiptPreview');
+            const fileInput = document.getElementById('paymentReceiptUpload');
+            const receiptStatus = document.getElementById('paymentReceiptStatus');
+            
+            // Reset file input
+            fileInput.value = '';
+            
+            // Hide preview and show upload area
+            preview.style.display = 'none';
+            uploadArea.style.display = 'block';
+            
+            // Hide status
+            receiptStatus.classList.add('hidden');
+            
+            // Mark as not uploaded
+            paymentReceiptUploaded = false;
+            validateForm();
+        }
+
+        // Change receipt
+        function changeReceipt() {
+            const fileInput = document.getElementById('paymentReceiptUpload');
+            fileInput.click();
+        }
+
+        // View receipt (open PDF in new tab)
+        function viewReceipt() {
+            const fileInput = document.getElementById('paymentReceiptUpload');
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileURL = URL.createObjectURL(file);
+                window.open(fileURL, '_blank');
+            }
+        }
+
+        // Format file size helper
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Generate booking reference
+        function generateBookingReference() {
+            const timestamp = Date.now().toString().slice(-6);
+            const reference = `BOOK-2025-${timestamp}`;
+            
+            document.getElementById('transferReference').textContent = reference;
+            document.getElementById('qrReference').textContent = reference;
+        }
+
+        // Format category name (duplicate kept for scope; normalized)
+        function formatCategoryName(category) {
+            if (!category) return 'Unknown';
+            const str = String(category).replace(/_/g, ' ').toLowerCase();
+            return str.replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        // Initialize form validation
+        function initializeFormValidation() {
+            const form = document.getElementById('bookingForm');
+            form.addEventListener('submit', handleFormSubmit);
+        }
+
+        // Validate form
+        function validateForm() {
+            const completeBtn = document.getElementById('completePaymentBtn');
+            const serviceCategory = document.getElementById('serviceCategory').value;
+            
+            let isValid = selectedPets.length > 0 && 
+                          selectedService && 
+                          selectedPaymentMethod &&
+                          paymentReceiptUploaded;
+            
+            // For Cat Hotel services, also require room selection and check-in/out details
+            if (serviceCategory === 'CAT HOTEL') {
+                const checkinDate = document.getElementById('checkinDate').value;
+                const checkoutDate = document.getElementById('checkoutDate').value;
+                const checkinTime = document.getElementById('checkinTime').value;
+                const checkoutTime = document.getElementById('checkoutTime').value;
+                
+                isValid = isValid && selectedRoom && 
+                         checkinDate && checkoutDate && 
+                         checkinTime && checkoutTime && 
+                         nightsCount > 0;
+            } else {
+                // For regular services, require date and time slot
+                isValid = isValid && selectedTimeSlot;
+            }
+            
+            completeBtn.disabled = !isValid;
+            return isValid;
+        }
+
+        // Update form field requirements based on service category
+        function updateFormRequirements() {
+            const serviceCategory = document.getElementById('serviceCategory').value;
+            
+            // Get all form fields
+            const regularFields = ['bookingDate', 'bookingTime'];
+            const catHotelFields = ['checkinDate', 'checkinTime', 'checkoutDate', 'checkoutTime'];
+            
+            if (serviceCategory === 'CAT HOTEL') {
+                // Remove required from regular service fields
+                regularFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.removeAttribute('required');
+                        field.disabled = true;
+                    }
+                });
+                
+                // Add required to Cat Hotel fields
+                catHotelFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.setAttribute('required', 'required');
+                        field.disabled = false;
+                    }
+                });
+            } else {
+                // Add required to regular service fields
+                regularFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.setAttribute('required', 'required');
+                        field.disabled = false;
+                    }
+                });
+                
+                // Remove required from Cat Hotel fields
+                catHotelFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.removeAttribute('required');
+                        field.disabled = true;
+                    }
+                });
+            }
+        }
+
+        // Handle form submission
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                showError('Please complete all required fields');
+                return;
+            }
+            
+            const completeBtn = document.getElementById('completePaymentBtn');
+            completeBtn.disabled = true;
+            completeBtn.innerHTML = '<i class="ri-loader-4-line"></i> Processing...';
+            
+            try {
+                const formData = new FormData();
+                formData.append('action', 'create_booking');
+                formData.append('tab_session_id', sessionStorage.getItem('tab_session_id') || '');
+                // Backward compatibility: send first pet_id as well
+                formData.append('pet_id', selectedPet.id);
+                // Also send all selected pet ids
+                const petIds = selectedPets.map(p => p.id);
+                try { formData.append('pet_ids', JSON.stringify(petIds)); } catch (err) {}
+                petIds.forEach(id => formData.append('pet_ids[]', id));
+                formData.append('service_id', selectedService.id);
+                
+                // Add booking details based on service type
+                const serviceCategory = document.getElementById('serviceCategory').value;
+                if (serviceCategory === 'CAT HOTEL') {
+                    formData.append('checkin_date', document.getElementById('checkinDate').value);
+                    formData.append('checkout_date', document.getElementById('checkoutDate').value);
+                    formData.append('checkin_time', document.getElementById('checkinTime').value);
+                    formData.append('checkout_time', document.getElementById('checkoutTime').value);
+                    formData.append('nights_count', nightsCount);
+                } else {
+                    formData.append('booking_date', document.getElementById('bookingDate').value);
+                    formData.append('booking_time', selectedTimeSlot);
+                }
+                
+                formData.append('payment_method', selectedPaymentMethod);
+                formData.append('additional_notes', document.getElementById('additionalNotes').value);
+                
+                // Add room selection for Cat Hotel services
+                if (selectedRoom) {
+                    formData.append('room_code', selectedRoom.id);
+                }
+                
+                // Total amount for all pets
+                let totalAmount = selectedPets.reduce((sum, p) => sum + calculateServicePrice(selectedService, p), 0);
+                if (serviceCategory === 'CAT HOTEL' && nightsCount > 0) {
+                    totalAmount = totalAmount * nightsCount;
+                }
+                formData.append('total_amount', totalAmount);
+                
+                if (document.getElementById('paymentReceiptUpload').files.length > 0) {
+                    formData.append('receipt', document.getElementById('paymentReceiptUpload').files[0]);
+                }
+                
+                const response = await fetch('bookings.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Store booking data in session for confirmation page
+                    sessionStorage.setItem('lastBookingData', JSON.stringify({
+                        booking_reference: result.data.booking_reference,
+                        booking_type: result.data.booking_type,
+                        total_amount: result.data.total_amount,
+                        payment_method: result.data.payment_method,
+                        service_name: selectedService.service_name,
+                        service_category: selectedService.service_category,
+                        pet_name: selectedPet.name,
+                        pet_category: selectedPet.pet_category || selectedPet.breed,
+                        booking_date: document.getElementById('bookingDate').value,
+                        booking_time: selectedTimeSlot,
+                        checkin_date: document.getElementById('checkinDate').value,
+                        checkout_date: document.getElementById('checkoutDate').value,
+                        checkin_time: document.getElementById('checkinTime').value,
+                        checkout_time: document.getElementById('checkoutTime').value,
+                        nights_count: nightsCount,
+                        room_code: selectedRoom?.id,
+                        receipt_file_path: document.getElementById('paymentReceiptUpload').files.length > 0 ? 'uploaded' : null
+                    }));
+                    
+                    // Stop auto-refresh before redirecting
+                    stopAvailabilityRefresh();
+                    
+                    showSuccess('Booking completed successfully! Redirecting to confirmation...');
+                    setTimeout(() => {
+                        window.location.href = `booking_confirmation.html?booking_id=${result.data.booking_id}&booking_type=${result.data.booking_type}`;
+                    }, 1500);
+                } else {
+                    showError(result.message || 'Failed to create booking');
+                    completeBtn.disabled = false;
+                    completeBtn.innerHTML = '<i class="ri-check-line"></i> Complete Payment';
+                }
+            } catch (error) {
+                console.error('Error creating booking:', error);
+                showError('Error creating booking. Please try again.');
+                completeBtn.disabled = false;
+                completeBtn.innerHTML = '<i class="ri-check-line"></i> Complete Payment';
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            // Remove existing messages
+            document.querySelectorAll('.error-message, .success-message').forEach(msg => msg.remove());
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            
+            const form = document.getElementById('bookingForm');
+            form.insertBefore(errorDiv, form.firstChild);
+            
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            // Remove existing messages
+            document.querySelectorAll('.error-message, .success-message').forEach(msg => msg.remove());
+            
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.textContent = message;
+            
+            const form = document.getElementById('bookingForm');
+            form.appendChild(successDiv);
+            
+            setTimeout(() => successDiv.remove(), 5000);
+        }
+
+        // Navigation functions
+        function goBack() {
+            window.location.href = 'services.html';
+        }
+
+        function cancelBooking() {
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                window.location.href = 'services.html';
+            }
+        }
+
+        // Navigation functionality
+        const menuBtn = document.getElementById('menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('nav__links--active');
+        });
+    </script>
+</body>
+</html>

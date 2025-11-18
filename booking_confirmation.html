@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation - Catswell</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        /* Confirmation Page Specific Styles */
+        .confirmation-page {
+            min-height: 100vh;
+            background: #e7daf2 ;
+            background-attachment: fixed;
+            padding: 100px 20px 40px;
+            position: relative;
+        }
+
+        .confirmation-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .confirmation-header {
+            text-align: center;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .confirmation-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .confirmation-title h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #8c6caf;
+            margin: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .confirmation-title i {
+            font-size: 2rem;
+            color: #28a745;
+            opacity: 0;
+            transform: scale(0.8) rotate(-10deg);
+            animation: bounceIn 0.8s ease-out 0.6s forwards;
+        }
+
+        .confirmation-subtitle {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeInUp 0.8s ease-out 0.8s forwards;
+        }
+
+        /* Confirmation Card Styles */
+        .confirmation-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out 1s forwards;
+        }
+
+        .confirmation-section {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .confirmation-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #3f3b57;
+        }
+
+        .section-title i {
+            color: #8c6caf;
+            font-size: 1.1rem;
+        }
+
+        /* Customer Information - Matching booking_services.html */
+        .customer-info {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+        }
+
+        .customer-info .info-field:nth-child(4) {
+            grid-column: 1 / -1;
+        }
+
+        .info-field {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+
+        .info-field label {
+            display: block;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .info-field span {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+
+        .pet-card {
+            background: white;
+            border: 3px solid #8c6caf;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .pet-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 3px solid #e9ecef;
+        }
+
+        .pet-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pet-image i {
+            font-size: 2rem;
+            color: #6c757d;
+        }
+
+        .pet-name {
+            font-weight: 600;
+            color: #3f3b57;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .pet-details {
+            font-size: 0.85rem;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        .service-info {
+            background: linear-gradient(135deg, #f0f0ff 0%, #e0d8ff 100%);
+            border: 2px solid #8c6caf;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .service-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #8c6caf;
+            margin-bottom: 10px;
+        }
+
+        .service-category {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+
+        .booking-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .booking-detail {
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .booking-detail label {
+            display: block;
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .booking-detail span {
+            font-weight: 600;
+            color: #3f3b57;
+        }
+
+        .price-summary {
+            background:  #a78bfa;
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .price-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .price-breakdown {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .receipt-info {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .receipt-info i {
+            color: #28a745;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .receipt-info h4 {
+            color: #155724;
+            margin: 0 0 5px 0;
+        }
+
+        .receipt-info p {
+            color: #155724;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 150px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background:  #a78bfa;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(140, 108, 175, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) rotate(-10deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1) rotate(5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .confirmation-page {
+                padding: 80px 15px 30px;
+            }
+
+            .confirmation-card {
+                padding: 25px;
+            }
+
+            .confirmation-title h1 {
+                font-size: 2rem;
+            }
+
+            .customer-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .customer-info .info-field:nth-child(4) {
+                grid-column: 1;
+            }
+
+            .booking-details {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Footer Styles - Matching booking_services.html */
+        .dashboard__footer {
+            background: #3f3b57;
+            padding: 1rem 0;
+            margin-top: 4rem;
+            color: white;
+        }
+
+        .footer__container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .footer__logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .footer__logo img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .footer__copyright {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.8rem;
+        }
+
+        /* Fix welcome button to display on single line */
+        .user-profile-inner {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-profile-inner p {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        /* Ensure button is wide enough for text */
+        .user-profile {
+            width: auto !important;
+            min-width: 131px;
+            padding: 0 10px;
+            /* Remove purple gradient background to make it consistent with other pages */
+            background: transparent !important;
+            background-color: transparent !important;
+        }
+
+        .user-profile:hover,
+        .user-profile:focus {
+            background: transparent !important;
+            background-color: transparent !important;
+            box-shadow: none;
+        }
+
+        .user-profile-inner {
+            width: 100% !important;
+            max-width: 100%;
+            padding: 0 12px;
+        }
+
+        /* Ensure nav header has transparent background like other pages */
+        .nav__header {
+            background-color: transparent !important;
+        }
+
+        /* Ensure nav has no background like other pages */
+        nav {
+            background: transparent !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav__header">
+            <div class="nav__logo">
+                <img src="assets/logo.png" alt="Pet Place Logo" class="logo-img">
+            </div>
+            <div class="nav__menu__btn" id="menu-btn">
+                <i class="ri-menu-line"></i>
+            </div>
+        </div>
+        <ul class="nav__links" id="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li class="nav__login-item">
+                <div
+                    aria-label="User Profile"
+                    tabindex="0"
+                    role="button"
+                    class="user-profile"
+                    onclick="window.location.href='cust-dashboard.html'"
+                >
+                    <div class="user-profile-inner">
+                        <svg
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                        >
+                            <g data-name="Layer 2" id="Layer_2">
+                                <path
+                                    d="m15.626 11.769a6 6 0 1 0 -7.252 0 9.008 9.008 0 0 0 -5.374 8.231 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 9.008 9.008 0 0 0 -5.374-8.231zm-7.626-4.769a4 4 0 1 1 4 4 4 4 0 0 1 -4-4zm10 14h-12a1 1 0 0 1 -1-1 7 7 0 0 1 14 0 1 1 0 0 1 -1 1z"
+                                ></path>
+                            </g>
+                        </svg>
+                        <p id="user-name">Log In</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Confirmation Page Content -->
+    <div class="confirmation-page">
+        <div class="confirmation-container">
+            <!-- Header Section -->
+            <div class="confirmation-header">
+                <div class="confirmation-title">
+                    <i class="ri-check-line"></i>
+                    <h1>Booking Confirmed!</h1>
+                </div>
+                <p class="confirmation-subtitle">Your booking has been successfully created</p>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading">
+                <i class="ri-loader-4-line" style="font-size: 2rem; animation: spin 1s linear infinite;"></i>
+                <p>Loading booking details...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error" style="display: none;">
+                <i class="ri-error-warning-line"></i>
+                <span id="errorMessage">Failed to load booking details</span>
+            </div>
+
+            <!-- Confirmation Card -->
+            <div id="confirmationCard" class="confirmation-card" style="display: none;">
+                
+                <!-- Booking Reference -->
+                <div class="confirmation-section">
+                    <div class="section-title">
+                        <i class="ri-ticket-line"></i>
+                        <h3>Booking Reference</h3>
+                    </div>
+                    <div class="info-item" style="text-align: center; background: linear-gradient(135deg, #f0f0ff 0%, #e0d8ff 100%); border-color: #8c6caf;">
+                        <label>Reference Number</label>
+                        <span id="bookingReference" style="font-size: 1.2rem; font-weight: 700; color: #8c6caf;"></span>
+                    </div>
+                </div>
+
+                <!-- Customer Information -->
+                <div class="confirmation-section">
+                    <div class="section-title">
+                        <i class="ri-user-line"></i>
+                        <h3>Customer Information</h3>
+                    </div>
+                    <div class="customer-info">
+                        <div class="info-field">
+                            <label>Name</label>
+                            <span id="customerName">Loading...</span>
+                        </div>
+                        <div class="info-field">
+                            <label>Email</label>
+                            <span id="customerEmail">Loading...</span>
+                        </div>
+                        <div class="info-field">
+                            <label>Phone</label>
+                            <span id="customerPhone">Loading...</span>
+                        </div>
+                        <div class="info-field">
+                            <label>Address</label>
+                            <span id="customerAddress">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pet Information -->
+                <div class="confirmation-section">
+                    <div class="section-title">
+                        <i class="ri-paw-print-line"></i>
+                        <h3>Selected Pet<span id="petCountBadge"></span></h3>
+                    </div>
+                    <div id="petInfo" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                        <!-- Pet information will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Service Information -->
+                <div class="confirmation-section">
+                    <div class="section-title">
+                        <i class="ri-service-line"></i>
+                        <h3>Service Details</h3>
+                    </div>
+                    <div class="service-info">
+                        <div class="service-name" id="serviceName">Loading...</div>
+                        <div class="service-category" id="serviceCategory">Loading...</div>
+                        <div class="booking-details" id="bookingDetails">
+                            <!-- Booking details will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Information -->
+                <div class="confirmation-section">
+                    <div class="section-title">
+                        <i class="ri-money-dollar-circle-line"></i>
+                        <h3>Payment Summary</h3>
+                    </div>
+                    <div class="price-summary">
+                        <div class="price-amount" id="totalAmount">RM 0.00</div>
+                        <div class="price-breakdown" id="priceBreakdown">Payment method and details</div>
+                    </div>
+                </div>
+
+                <!-- Receipt Information (Only for Service Bookings, not Hotel) -->
+                <div class="confirmation-section" id="receiptSection">
+                    <div class="section-title">
+                        <i class="ri-file-upload-line"></i>
+                        <h3>Receipt Status</h3>
+                    </div>
+                    <div class="receipt-info">
+                        <i class="ri-check-line"></i>
+                        <h4>Receipt Uploaded Successfully</h4>
+                        <p id="receiptStatus">Your payment receipt has been uploaded and will be processed shortly.</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="goToDashboard()">
+                        <i class="ri-dashboard-line"></i>
+                        Go to Dashboard
+                    </button>
+                    <button class="btn btn-success" onclick="bookAnotherService()">
+                        <i class="ri-add-line"></i>
+                        Book Another Service
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="dashboard__footer">
+        <div class="footer__container">
+            <div class="footer__logo">
+                <img src="assets/logo.png" alt="CatsWell Logo">
+            </div>
+            <div class="footer__copyright">
+                © 2025 Catswell Pet Care Management. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Include main.js for navigation functionality -->
+    <script src="main.js"></script>
+    
+    <script>
+        let bookingData = null;
+        let customerInfo = null;
+        let loadedPetData = null;
+        let allLoadedPets = [];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check login status and update welcome button
+            checkLoginStatus();
+            
+            // Get booking data from URL parameters or session storage
+            loadBookingData();
+        });
+
+        // Check login status and update welcome button
+        async function checkLoginStatus() {
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'action=check_login&tab_session_id=' + encodeURIComponent(sessionStorage.getItem('tab_session_id') || '')
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.logged_in) {
+                    // Update welcome button with user's first name
+                    updateWelcomeButton(result.first_name);
+                }
+            } catch (error) {
+                console.error('Login check failed:', error);
+            }
+        }
+
+        // Update welcome button with user's first name
+        function updateWelcomeButton(firstName) {
+            const userNameElement = document.getElementById('user-name');
+            if (userNameElement) {
+                userNameElement.textContent = `Welcome, ${firstName || 'User'}`;
+            }
+        }
+
+        // Load pet information for the specific booking
+        async function loadPetInfo() {
+            try {
+                // Get pet ID from booking data, or try to find by name if ID not available
+                const petId = bookingData.pet_id;
+                const petName = bookingData.pet_name;
+                const additionalPets = bookingData.additional_pets || bookingData.additional_pet_ids || [];
+                
+                if (!petId && !petName) {
+                    console.log('No pet ID or name found in booking data');
+                    return;
+                }
+
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `action=get_pets&tab_session_id=${encodeURIComponent(sessionStorage.getItem('tab_session_id') || '')}`
+                });
+                
+                const result = await response.json();
+                console.log('Pets result:', result);
+                
+                if (result.success && Array.isArray(result.pets)) {
+                    let bookingPets = [];
+                    
+                    // Find primary pet
+                    if (petId) {
+                        bookingPets = result.pets.filter(pet => pet.id == petId);
+                    } else if (petName) {
+                        bookingPets = result.pets.filter(pet => pet.name === petName);
+                    }
+                    
+                    // Find additional pets if available
+                    if (additionalPets && additionalPets.length > 0) {
+                        const additionalPetIds = Array.isArray(additionalPets) ? additionalPets : JSON.parse(additionalPets);
+                        additionalPetIds.forEach(petId => {
+                            const additionalPet = result.pets.find(pet => pet.id == petId);
+                            if (additionalPet) {
+                                bookingPets.push(additionalPet);
+                            }
+                        });
+                    }
+                    
+                    if (bookingPets.length > 0) {
+                        loadedPetData = bookingPets.length === 1 ? bookingPets[0] : bookingPets;
+                        allLoadedPets = bookingPets; // Store all pets for display
+                        console.log('Pet info loaded:', loadedPetData);
+                        console.log('All pets:', allLoadedPets);
+                    } else {
+                        console.log('Pet not found with ID:', petId, 'or name:', petName);
+                    }
+                } else {
+                    console.log('Failed to load pets:', result.message);
+                }
+            } catch (error) {
+                console.error('Error loading pet info:', error);
+            }
+        }
+
+        // Load booking data
+        async function loadBookingData() {
+            try {
+                // Get booking data from URL parameters first (this ensures we get complete data including all_pets)
+                const urlParams = new URLSearchParams(window.location.search);
+                const bookingId = urlParams.get('booking_id');
+                const bookingType = urlParams.get('booking_type');
+                
+                console.log('URL params - booking_id:', bookingId, 'booking_type:', bookingType);
+                
+                if (bookingId && bookingType) {
+                    // Load from API (this ensures we get complete data including all_pets for multiple pets)
+                    console.log('Loading from API...');
+                    await loadBookingFromAPI(bookingId, bookingType);
+                    return;
+                }
+                
+                // Fallback to session storage if no URL params
+                const sessionData = sessionStorage.getItem('lastBookingData');
+                console.log('Session data:', sessionData);
+                
+                if (sessionData) {
+                    bookingData = JSON.parse(sessionData);
+                    console.log('Parsed booking data:', bookingData);
+                    
+                    // Load customer information and pet information
+                    await loadCustomerInfo();
+                    await loadPetInfo();
+                    
+                    displayBookingData();
+                } else {
+                    showError('No booking data found. Please make a booking first.');
+                }
+            } catch (error) {
+                console.error('Error loading booking data:', error);
+                showError('Failed to load booking details');
+            }
+        }
+
+        // Load customer information
+        async function loadCustomerInfo() {
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'action=get_current_user&tab_session_id=' + encodeURIComponent(sessionStorage.getItem('tab_session_id') || '')
+                });
+                
+                const result = await response.json();
+                console.log('Customer info result:', result);
+                
+                if (result.success && result.user) {
+                    customerInfo = result.user;
+                    console.log('Customer info loaded:', customerInfo);
+                } else {
+                    console.error('Failed to load customer info:', result.message);
+                }
+            } catch (error) {
+                console.error('Error loading customer info:', error);
+            }
+        }
+
+        // Load booking from API
+        async function loadBookingFromAPI(bookingId, bookingType) {
+            try {
+                const response = await fetch(`bookings.php?action=get_booking&booking_id=${bookingId}`, {
+                    method: 'GET'
+                });
+                const result = await response.json();
+                
+                console.log('Booking API response:', result);
+                
+                if (result.success) {
+                    bookingData = result.data;
+                    
+                    // If API already returned all_pets array, use that
+                    if (bookingData.all_pets && Array.isArray(bookingData.all_pets)) {
+                        allLoadedPets = bookingData.all_pets;
+                        console.log('Loaded pets from API all_pets:', allLoadedPets);
+                    }
+                    
+                    // Load customer information
+                    await loadCustomerInfo();
+                    
+                    // Only load pet info if all_pets not available from API
+                    if (!allLoadedPets || allLoadedPets.length === 0) {
+                        await loadPetInfo();
+                    }
+                    
+                    displayBookingData();
+                } else {
+                    showError(result.message || 'Failed to load booking details');
+                }
+            } catch (error) {
+                console.error('Error fetching booking:', error);
+                showError('Failed to load booking details');
+            }
+        }
+
+        // Display booking data
+        function displayBookingData() {
+            if (!bookingData) return;
+
+            // Hide loading, show confirmation card
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('confirmationCard').style.display = 'block';
+
+            // Fill in booking reference
+            document.getElementById('bookingReference').textContent = bookingData.booking_reference || 'N/A';
+
+            // Fill in customer information
+            if (customerInfo) {
+                document.getElementById('customerName').textContent = `${customerInfo.first_name || ''} ${customerInfo.last_name || ''}`.trim() || 'Not provided';
+                document.getElementById('customerEmail').textContent = customerInfo.email || 'Not provided';
+                document.getElementById('customerPhone').textContent = customerInfo.phone_number || 'Not provided';
+                document.getElementById('customerAddress').textContent = customerInfo.address || 'Not provided';
+            } else {
+                // Fallback to booking data if customer info not loaded
+                document.getElementById('customerName').textContent = `${bookingData.first_name || ''} ${bookingData.last_name || ''}`.trim() || 'Not provided';
+                document.getElementById('customerEmail').textContent = bookingData.email || 'Not provided';
+                document.getElementById('customerPhone').textContent = bookingData.phone_number || 'Not provided';
+                document.getElementById('customerAddress').textContent = bookingData.address || 'Not provided';
+            }
+
+            // Fill in pet information
+            const petInfo = document.getElementById('petInfo');
+            const petCountBadge = document.getElementById('petCountBadge');
+            
+            // Format category name for display
+            function formatCategoryName(category) {
+                if (!category) return 'Unknown';
+                const str = String(category).replace(/_/g, ' ').toLowerCase();
+                return str.replace(/\b\w/g, l => l.toUpperCase());
+            }
+            
+            // Check if we have multiple pets
+            // First try allLoadedPets, then try bookingData.all_pets from API, then fallback to single pet
+            let petsToDisplay = [];
+            
+            console.log('Displaying pets - allLoadedPets:', allLoadedPets);
+            console.log('Displaying pets - bookingData.all_pets:', bookingData.all_pets);
+            console.log('Displaying pets - loadedPetData:', loadedPetData);
+            
+            // Check if allLoadedPets is an array
+            if (allLoadedPets) {
+                const isArray = Array.isArray(allLoadedPets);
+                if (isArray && allLoadedPets.length > 0) {
+                    petsToDisplay = allLoadedPets;
+                } else if (!isArray && Object.keys(allLoadedPets).length > 0) {
+                    // Single pet object, convert to array
+                    petsToDisplay = [allLoadedPets];
+                }
+            }
+            
+            // Try bookingData.all_pets from API
+            if (petsToDisplay.length === 0 && bookingData.all_pets && Array.isArray(bookingData.all_pets) && bookingData.all_pets.length > 0) {
+                petsToDisplay = bookingData.all_pets;
+                console.log('Using all_pets from bookingData:', petsToDisplay);
+            }
+            
+            // Fall back to single loaded pet
+            if (petsToDisplay.length === 0 && loadedPetData) {
+                petsToDisplay = [loadedPetData];
+                console.log('Using single loadedPetData');
+            }
+            
+            // Last fallback: use pet_name from booking data
+            if (petsToDisplay.length === 0 && bookingData.pet_name) {
+                petsToDisplay = [{
+                    name: bookingData.pet_name,
+                    pet_category: bookingData.pet_category || bookingData.breed || 'Unknown',
+                    weight: null,
+                    age: null,
+                    photo_path: null
+                }];
+                console.log('Using fallback pet data from booking:', petsToDisplay);
+            }
+            
+            console.log('Final petsToDisplay:', petsToDisplay);
+            
+            // Update badge if multiple pets
+            if (petsToDisplay.length > 1) {
+                if (petCountBadge) {
+                    petCountBadge.innerHTML = ` <span style="background: #8c6caf; color: white; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.75rem; margin-left: 0.5rem;">${petsToDisplay.length} Pets</span>`;
+                }
+            } else {
+                if (petCountBadge) {
+                    petCountBadge.innerHTML = '';
+                }
+            }
+            
+            // Format weight with units
+            const formatWeight = (weight) => {
+                if (weight === null || weight === undefined || weight === '' || weight === 'NULL') return 'Not specified';
+                if (weight === 0 || weight === '0') return 'Not specified';
+                return `${weight} kg`;
+            };
+            
+            // Format age with units
+            const formatAge = (age) => {
+                if (age === null || age === undefined || age === '' || age === 'NULL') return 'Not specified';
+                if (age === 0 || age === '0') return 'Not specified';
+                return `${age} years`;
+            };
+            
+            // Format vaccine information
+            const formatVaccine = (petData) => {
+                if (petData.vaccine_name && petData.vaccine_name !== 'NULL' && petData.vaccine_name.trim() !== '') {
+                    return petData.vaccine_name;
+                }
+                if (petData.vaccinations && petData.vaccinations.length > 0) {
+                    return petData.vaccinations.map(v => v.name).join(', ');
+                }
+                return 'Not specified';
+            };
+            
+            // Get the best available category information
+            const getCategory = (petData) => {
+                if (petData.category) return petData.category;
+                if (petData.breed) return petData.breed;
+                if (petData.pet_category) return petData.pet_category;
+                return 'Unknown';
+            };
+            
+            // Create pet cards HTML
+            let petCards = '';
+            
+            if (petsToDisplay.length === 0) {
+                petCards = `
+                    <div class="pet-card" style="min-width: 200px; max-width: 250px; flex: 1 1 auto; text-align: center; padding: 40px 20px;">
+                        <div class="pet-image">
+                            <i class="ri-paw-print-line"></i>
+                        </div>
+                        <div class="pet-name">Pet Information Not Available</div>
+                        <div class="pet-details" style="color: #6c757d;">
+                            Please contact support for details
+                        </div>
+                    </div>
+                `;
+            } else {
+                petCards = petsToDisplay.map(petData => {
+                    const petImage = petData.photo_path ? 
+                        `<img src="${petData.photo_path}" alt="${petData.name}">` :
+                        `<i class="ri-paw-print-line"></i>`;
+                    
+                    return `
+                        <div class="pet-card" style="min-width: 200px; max-width: 250px; flex: 1 1 auto;">
+                            <div class="pet-image">
+                                ${petImage}
+                            </div>
+                            <div class="pet-name">${petData.name || 'Unknown Pet'}</div>
+                            <div class="pet-details">
+                                <div><strong>Category:</strong> ${formatCategoryName(getCategory(petData))}</div>
+                                <div><strong>Weight:</strong> ${formatWeight(petData.weight)}</div>
+                                <div><strong>Age:</strong> ${formatAge(petData.age)}</div>
+                                <div><strong>Vaccine:</strong> ${formatVaccine(petData)}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            petInfo.innerHTML = petCards;
+
+            // Fill in service information
+            document.getElementById('serviceName').textContent = bookingData.service_name || 'Unknown Service';
+            document.getElementById('serviceCategory').textContent = formatCategoryName(bookingData.service_category || 'Unknown Category');
+
+            // Fill in booking details based on service type
+            const bookingDetails = document.getElementById('bookingDetails');
+            if (bookingData.service_category === 'CAT HOTEL') {
+                bookingDetails.innerHTML = `
+                    <div class="booking-detail">
+                        <label>Check-in Date</label>
+                        <span>${formatDate(bookingData.checkin_date) || 'N/A'}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <label>Check-in Time</label>
+                        <span>${formatTime(bookingData.checkin_time) || 'N/A'}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <label>Check-out Date</label>
+                        <span>${formatDate(bookingData.checkout_date) || 'N/A'}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <label>Check-out Time</label>
+                        <span>${formatTime(bookingData.checkout_time) || 'N/A'}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <label>Nights</label>
+                        <span>${bookingData.nights_count || 0}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <label>Room</label>
+                        <span>${bookingData.room_code || 'N/A'}</span>
+                    </div>
+                `;
+            } else {
+                bookingDetails.innerHTML = `
+                    <div class="booking-detail">
+                        <label>Booking Date</label>
+                        <span>${formatDate(bookingData.booking_date) || 'N/A'}</span>
+                    </div>
+                    <div class="booking-detail">
+                        <label>Booking Time</label>
+                        <span>${formatTime(bookingData.booking_time) || 'N/A'}</span>
+                    </div>
+                `;
+            }
+
+            // Fill in payment information (consistent format for both service and hotel bookings)
+            document.getElementById('totalAmount').textContent = `RM ${parseFloat(bookingData.total_amount || 0).toFixed(2)}`;
+            document.getElementById('priceBreakdown').innerHTML = `<strong>Total Amount:</strong> RM ${parseFloat(bookingData.total_amount || 0).toFixed(2)}<br><strong>Payment Method:</strong> ${bookingData.payment_method || 'Unknown'}`;
+
+            // Hide receipt section for hotel bookings (CAT HOTEL)
+            const receiptSection = document.getElementById('receiptSection');
+            if (bookingData.service_category === 'CAT HOTEL') {
+                if (receiptSection) {
+                    receiptSection.style.display = 'none';
+                }
+            } else {
+                // Show receipt section for service bookings
+                if (receiptSection) {
+                    receiptSection.style.display = 'block';
+                }
+                // Update receipt status
+                const receiptStatus = document.getElementById('receiptStatus');
+                if (receiptStatus) {
+                    if (bookingData.receipt_file_path) {
+                        receiptStatus.textContent = 'Your payment receipt has been uploaded and will be processed shortly.';
+                    } else {
+                        receiptStatus.textContent = 'Please upload your payment receipt to complete the booking process.';
+                    }
+                }
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorState').style.display = 'block';
+        }
+
+        // Action button functions
+        function goToDashboard() {
+            window.location.href = 'cust-dashboard.html';
+        }
+
+        function bookAnotherService() {
+            window.location.href = 'booking_services.html';
+        }
+        
+        // Format date from YYYY-MM-DD to DD/MM/YYYY
+        function formatDate(dateString) {
+            if (!dateString || dateString === 'N/A' || dateString === 'null' || dateString === 'undefined') {
+                return 'N/A';
+            }
+            
+            try {
+                // Parse the date string
+                const date = new Date(dateString);
+                
+                // Check if date is valid
+                if (isNaN(date.getTime())) {
+                    return dateString; // Return original if invalid
+                }
+                
+                // Format as DD/MM/YYYY
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                
+                return `${day}/${month}/${year}`;
+            } catch (error) {
+                return dateString; // Return original if error
+            }
+        }
+
+        // Format time for display - converts 24-hour format to 12-hour format with AM/PM
+        // STANDARDIZED FUNCTION - Ensures consistent time display across all pages
+        function formatTime(timeString) {
+            if (!timeString) return 'N/A';
+            
+            // Normalize the string
+            let timeStr = String(timeString).trim();
+            
+            // Handle invalid formats like "14:00 PM" by removing AM/PM and re-converting
+            if (timeStr.includes('AM') || timeStr.includes('PM') || timeStr.includes('am') || timeStr.includes('pm')) {
+                // Extract the time part and check if hour is > 12 (invalid for 12-hour format)
+                const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})(:\d{2})?\s*(AM|PM|am|pm)?/i);
+                if (timeMatch) {
+                    const hour24 = parseInt(timeMatch[1]);
+                    // If hour is > 12 and has AM/PM, this is invalid (like "14:00 PM")
+                    // Remove AM/PM and convert properly
+                    if (hour24 > 12) {
+                        timeStr = `${hour24}:${timeMatch[2]}${timeMatch[3] || ''}`;
+                        // Continue with conversion below
+                    } else {
+                        // Valid 12-hour format, return as is
+                        return timeStr;
+                    }
+                } else {
+                    return timeStr; // Return as is if we can't parse it
+                }
+            }
+            
+            // Handle 24-hour format (HH:MM or HH:MM:SS) - convert to 12-hour
+            // Match patterns like "14:00:00", "14:00", "2:00", etc.
+            const timeMatch = timeStr.match(/^(\d{1,2}):(\d{2})(:\d{2})?$/);
+            if (timeMatch) {
+                const hour24 = parseInt(timeMatch[1]);
+                const minute = parseInt(timeMatch[2]);
+                
+                // Convert to 12-hour format
+                let hour12;
+                let ampm;
+                
+                if (hour24 === 0) {
+                    hour12 = 12; // Midnight: 00:00 -> 12:00 AM
+                    ampm = 'AM';
+                } else if (hour24 === 12) {
+                    hour12 = 12; // Noon: 12:00 -> 12:00 PM
+                    ampm = 'PM';
+                } else if (hour24 > 12) {
+                    hour12 = hour24 - 12; // PM times: 14:00 -> 2:00 PM, 23:00 -> 11:00 PM
+                    ampm = 'PM';
+                } else {
+                    // Hours 1-11: Could be AM or PM depending on context
+                    // Based on booking slots, 1-5 are commonly PM in bookings
+                    if (hour24 >= 1 && hour24 <= 5) {
+                        hour12 = hour24;
+                        ampm = 'PM'; // Likely PM based on booking slots
+                    } else {
+                        hour12 = hour24; // 6-11 are typically AM
+                        ampm = 'AM';
+                    }
+                }
+                
+                // Format as "H:MM AM/PM" (single digit hour without leading zero)
+                return `${hour12}:${String(minute).padStart(2, '0')} ${ampm}`;
+            }
+            
+            // If it's a full datetime string, extract and format the time part
+            if (timeStr.includes('T') || (timeStr.includes(' ') && timeStr.includes(':'))) {
+                try {
+                    // Try to parse as a full datetime first
+                    const time = new Date(timeStr);
+                    if (!isNaN(time.getTime())) {
+                        // Extract hours and minutes and convert manually
+                        const hours = time.getHours();
+                        const minutes = time.getMinutes();
+                        
+                        let hour12;
+                        let ampm;
+                        
+                        if (hours === 0) {
+                            hour12 = 12;
+                            ampm = 'AM';
+                        } else if (hours === 12) {
+                            hour12 = 12;
+                            ampm = 'PM';
+                        } else if (hours > 12) {
+                            hour12 = hours - 12;
+                            ampm = 'PM';
+                        } else {
+                            hour12 = hours;
+                            ampm = 'AM';
+                        }
+                        
+                        return `${hour12}:${String(minutes).padStart(2, '0')} ${ampm}`;
+                    }
+                } catch (e) {
+                    // If parsing fails, try to extract time part
+                    const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})(:\d{2})?/);
+                    if (timeMatch) {
+                        const hour24 = parseInt(timeMatch[1]);
+                        const minute = parseInt(timeMatch[2]);
+                        let hour12;
+                        let ampm;
+                        
+                        if (hour24 === 0) {
+                            hour12 = 12;
+                            ampm = 'AM';
+                        } else if (hour24 === 12) {
+                            hour12 = 12;
+                            ampm = 'PM';
+                        } else if (hour24 > 12) {
+                            hour12 = hour24 - 12;
+                            ampm = 'PM';
+                        } else {
+                            if (hour24 >= 1 && hour24 <= 5) {
+                                hour12 = hour24;
+                                ampm = 'PM';
+                            } else {
+                                hour12 = hour24;
+                                ampm = 'AM';
+                            }
+                        }
+                        
+                        return `${hour12}:${String(minute).padStart(2, '0')} ${ampm}`;
+                    }
+                }
+            }
+            
+            // If all else fails, return the original string
+            return timeStr;
+        }
+
+        // Navigation functionality
+        const menuBtn = document.getElementById('menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('nav__links--active');
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+

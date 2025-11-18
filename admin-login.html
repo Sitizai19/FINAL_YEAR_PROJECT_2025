@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Pet Care Management</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Poppins", sans-serif;
+            background: rgb(62, 62, 62);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* From Uiverse.io by Praashoo7 */ 
+        .form {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          padding-left: 2em;
+          padding-right: 2em;
+          padding-bottom: 0.4em;
+          background-color: #171717;
+          border-radius: 25px;
+          transition: .4s ease-in-out;
+        }
+
+        .form:hover {
+          transform: scale(1.05);
+          border: 1px solid black;
+        }
+
+        #heading {
+          text-align: center;
+          margin: 2em;
+          color: rgb(255, 255, 255);
+          font-size: 1.2em;
+        }
+
+        .field {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5em;
+          border-radius: 25px;
+          padding: 0.6em;
+          border: none;
+          outline: none;
+          color: white;
+          background-color: #171717;
+          box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+        }
+
+        .input-icon {
+          height: 1.3em;
+          width: 1.3em;
+          fill: white;
+        }
+
+        .input-field {
+          background: none;
+          border: none;
+          outline: none;
+          width: 100%;
+          color: #d3d3d3;
+          background-color: transparent;
+        }
+
+        .input-field::placeholder {
+          color: #d3d3d3;
+        }
+
+        .input-field:focus {
+          background-color: transparent;
+          color: #d3d3d3;
+        }
+
+        /* Specific styling for password input to prevent white background */
+        input[type="password"] {
+          background-color: transparent;
+          background: transparent;
+          color: #d3d3d3;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+        }
+
+        input[type="password"]:focus {
+          background-color: transparent;
+          background: transparent;
+          color: #d3d3d3;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+        }
+
+        input[type="password"]:active {
+          background-color: transparent;
+          background: transparent;
+          color: #d3d3d3;
+        }
+
+        input[type="text"] {
+          background-color: transparent;
+          background: transparent;
+          color: #d3d3d3;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+        }
+
+        input[type="text"]:focus {
+          background-color: transparent;
+          background: transparent;
+          color: #d3d3d3;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+        }
+
+        input[type="text"]:active {
+          background-color: transparent;
+          background: transparent;
+          color: #d3d3d3;
+        }
+
+        select {
+          background-color: transparent;
+          background: transparent;
+          color: #d3d3d3;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          border: none;
+          outline: none;
+          width: 100%;
+          cursor: pointer;
+        }
+
+        select:focus {
+          background-color: transparent;
+          background: transparent;
+          color: #d3d3d3;
+        }
+
+        select option {
+          background-color: #171717;
+          color: #d3d3d3;
+        }
+
+        /* Additional override for all input states */
+        .input-field {
+          background-color: transparent;
+          background: transparent;
+          color: #d3d3d3;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+        }
+
+        .input-field:focus {
+          background-color: transparent;
+          background: transparent;
+          color: #d3d3d3;
+        }
+
+        .input-field:active {
+          background-color: transparent;
+          background: transparent;
+          color: #d3d3d3;
+        }
+
+        .form .btn {
+          display: flex;
+          justify-content: center;
+          flex-direction: row;
+          margin-top: 2.5em;
+          gap: 0.5em;
+        }
+
+        .button1 {
+          padding: 0.5em 1.1em;
+          border-radius: 5px;
+          border: none;
+          outline: none;
+          transition: .4s ease-in-out;
+          background-color: #252525;
+          color: white;
+          cursor: pointer;
+          flex: 1;
+        }
+
+        .button1:hover {
+          background-color: black;
+          color: white;
+        }
+
+        .button2 {
+          padding: 0.5em 1.1em;
+          border-radius: 5px;
+          border: none;
+          outline: none;
+          transition: .4s ease-in-out;
+          background-color: #252525;
+          color: white;
+          cursor: pointer;
+          flex: 1;
+        }
+
+        .button2:hover {
+          background-color: red;
+          color: white;
+        }
+
+        .button3 {
+          padding: 0.5em 1.1em;
+          border-radius: 5px;
+          border: none;
+          outline: none;
+          transition: .4s ease-in-out;
+          background-color: #252525;
+          color: white;
+          cursor: pointer;
+          flex: 1;
+        }
+
+        .button3:hover {
+          background-color: black;
+          color: white;
+        }
+
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .demo-text {
+            font-size: 0.8rem;
+            color: #ffffff;
+            margin: 1.5rem 0 0 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .demo-text::before {
+            content: "Demo: ";
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: #51cf66;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: rgba(81, 207, 102, 0.1);
+            border-radius: 5px;
+            display: none;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: transparent;
+            margin: 5% auto;
+            padding: 0;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .close {
+            color: #fff;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #ff6b6b;
+            text-decoration: none;
+        }
+
+        .signup-btn {
+            padding: 0.5em 1.1em;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            transition: .4s ease-in-out;
+            background-color: #252525;
+            color: white;
+            cursor: pointer;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .signup-btn:hover {
+            background-color: #4CAF50;
+            color: white;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+            <form class="form" id="adminLoginForm">
+            <p id="heading">Welcome Back, Admin</p>
+            <div class="field">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914z"></path>
+                </svg>
+                <input autocomplete="off" placeholder="Email" class="input-field" type="email" id="username" name="username" required>
+            </div>
+            <div class="field">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path>
+                </svg>
+                <input placeholder="Password" class="input-field" type="password" id="password" name="password" required>
+            </div>
+            <div class="btn">
+                <button class="button3" type="submit">Login</button>
+                <button class="button2" type="button" onclick="window.location.href='index.html'">Back to Home Page</button>
+        </div>
+        </form>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <button class="signup-btn" onclick="openSignUpModal()">Sign Up for new Staff member</button>
+
+        <p class="demo-text">catswell848@gmail.com / admin123</p>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div id="signUpModal" class="modal">
+        <span class="close" onclick="closeSignUpModal()">&times;</span>
+        <div class="modal-content">
+            <div class="login-container">
+                <form class="form" id="adminSignUpForm">
+                    <p id="heading">Sign Up New Staff Member</p>
+                    <div class="field">
+                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"></path>
+                        </svg>
+                        <input autocomplete="off" placeholder="First Name" class="input-field" type="text" id="signup_first_name" name="first_name" required>
+                    </div>
+                    <div class="field">
+                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"></path>
+                        </svg>
+                        <input autocomplete="off" placeholder="Last Name" class="input-field" type="text" id="signup_last_name" name="last_name" required>
+                    </div>
+                    <div class="field">
+                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"></path>
+                        </svg>
+                        <input autocomplete="off" placeholder="Role" class="input-field" type="text" id="signup_role" name="role" required>
+                    </div>
+                    <div class="field">
+                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"></path>
+                        </svg>
+                        <input autocomplete="off" placeholder="Email" class="input-field" type="email" id="signup_email" name="email" required>
+                    </div>
+                    <div class="field">
+                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M3.654 1.328a.678.678 0 0 0-1.015-.63L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.601-1.034a.678.678 0 0 0-.63-1.015l-2.415-.74a.678.678 0 0 0-.522-.094l-2.367.893a.678.678 0 0 1-.665-.434L5.482 8.062a.678.678 0 0 1 .434-.665l2.368-.893a.678.678 0 0 0 .094-.522L7.923.999a.678.678 0 0 0-1.015-.63l-2.254 1.45z"></path>
+                        </svg>
+                        <input autocomplete="off" placeholder="Phone Number" class="input-field" type="tel" id="signup_phone" name="phone">
+                    </div>
+                    <div class="field">
+                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path>
+                        </svg>
+                        <input placeholder="Password" class="input-field" type="password" id="signup_password" name="password" required minlength="6" title="Password must be at least 6 characters" autocomplete="new-password">
+                    </div>
+                    <div class="field">
+                        <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path>
+                        </svg>
+                        <input placeholder="Confirm Password" class="input-field" type="password" id="signup_confirm_password" name="confirm_password" required minlength="6" title="Password must be at least 6 characters" autocomplete="new-password">
+                    </div>
+                    <div class="btn">
+                        <button class="button3" type="submit">Sign Up</button>
+                        <button class="button2" type="button" onclick="closeSignUpModal()">Cancel</button>
+                    </div>
+                </form>
+
+                <div class="error-message" id="signupErrorMessage"></div>
+                <div class="success-message" id="signupSuccessMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form submission
+        document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Hide previous messages
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            if (!username || !password) {
+                showError('Please enter both email and password');
+                return;
+            }
+            
+            // Create form data
+            const formData = new FormData();
+            formData.append('action', 'login');
+            formData.append('username', username);
+            formData.append('password', password);
+            formData.append('is_admin_login', '1'); // Explicitly mark as admin login
+            
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                // Check if response is ok
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                const result = await response.json();
+                console.log('Login response:', result); // Debug log
+                
+                if (result.success) {
+                    showSuccess('Login successful! Redirecting to admin dashboard...');
+                    setTimeout(() => {
+                        const redirectUrl = result.redirect || 'admin-dashboard.html';
+                        console.log('Redirecting to:', redirectUrl); // Debug log
+                        window.location.href = redirectUrl;
+                    }, 1500);
+                } else {
+                    showError('Login failed: ' + (result.message || 'Unknown error'));
+                    console.error('Login failed:', result); // Debug log
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('An error occurred. Please try again. Error: ' + error.message);
+            }
+        });
+
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        function showSuccess(message) {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+        }
+
+        // Auto-fill demo credentials when clicking on demo text
+        document.querySelector('.demo-text').addEventListener('click', function() {
+            document.getElementById('username').value = 'catswell848@gmail.com';
+            document.getElementById('password').value = 'admin123';
+        });
+
+        // Sign Up Modal Functions
+        function openSignUpModal() {
+            document.getElementById('signUpModal').style.display = 'block';
+        }
+
+        function closeSignUpModal() {
+            document.getElementById('signUpModal').style.display = 'none';
+            // Clear form and messages
+            document.getElementById('adminSignUpForm').reset();
+            document.getElementById('signupErrorMessage').style.display = 'none';
+            document.getElementById('signupSuccessMessage').style.display = 'none';
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('signUpModal');
+            if (event.target == modal) {
+                closeSignUpModal();
+            }
+        }
+
+        // Sign Up Form submission
+        document.getElementById('adminSignUpForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('signup_first_name').value.trim();
+            const lastName = document.getElementById('signup_last_name').value.trim();
+            const role = document.getElementById('signup_role').value.trim();
+            const email = document.getElementById('signup_email').value.trim();
+            const phone = document.getElementById('signup_phone').value.trim();
+            const password = document.getElementById('signup_password').value;
+            const confirmPassword = document.getElementById('signup_confirm_password').value;
+            const errorMessage = document.getElementById('signupErrorMessage');
+            const successMessage = document.getElementById('signupSuccessMessage');
+            
+            // Hide previous messages
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            // Validation
+            if (!firstName || !lastName || !role || !email || !password || !confirmPassword) {
+                showSignUpError('Please fill in all required fields');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showSignUpError('Passwords do not match');
+                return;
+            }
+
+            if (password.length < 6) {
+                showSignUpError('Password must be at least 6 characters long');
+                return;
+            }
+
+            // Create form data
+            const formData = new FormData();
+            formData.append('action', 'signup');
+            formData.append('first_name', firstName);
+            formData.append('last_name', lastName);
+            formData.append('role', role);
+            formData.append('email', email);
+            formData.append('phone', phone);
+            formData.append('password', password);
+            
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showSignUpSuccess('Staff member registered successfully!');
+                    setTimeout(() => {
+                        closeSignUpModal();
+                    }, 1500);
+                } else {
+                    showSignUpError('Registration failed: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Sign up error:', error);
+                showSignUpError('An error occurred. Please try again.');
+            }
+        });
+
+        function showSignUpError(message) {
+            const errorMessage = document.getElementById('signupErrorMessage');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        function showSignUpSuccess(message) {
+            const successMessage = document.getElementById('signupSuccessMessage');
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

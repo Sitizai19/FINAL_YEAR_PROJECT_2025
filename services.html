@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Care Services - Catswell</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        /* Service Page Specific Styles */
+        .service-page {
+            min-height: 100vh;
+            background: #e7daf2 ;
+            background-attachment: fixed;
+            padding: 60px 20px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .service-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(220, 215, 248, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(220, 215, 248, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .service-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .service-header {
+            text-align: center;
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .service-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .service-title h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #8c6caf;
+            margin: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .service-title i {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            opacity: 0;
+            transform: scale(0.8) rotate(-10deg);
+            animation: bounceIn 0.8s ease-out 0.6s forwards;
+        }
+
+        .service-subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeInUp 0.8s ease-out 0.8s forwards;
+        }
+
+        .service-divider {
+            width: 100px;
+            height: 2px;
+            background-color: #e0e0e0;
+            margin: 0 auto;
+            opacity: 0;
+            transform: scaleX(0);
+            animation: expandWidth 0.8s ease-out 1s forwards;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+            padding: 0 10px;
+            justify-items: center;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s ease-out 1.2s forwards;
+            box-sizing: border-box;
+        }
+
+        /* From Uiverse.io by Yaya12085 */ 
+        .card {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            min-height: 600px;
+            border-radius: 0.5rem;
+            background-color: #fff;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border: 1px solid transparent;
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: cardSlideIn 0.6s ease-out forwards;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        .card:nth-child(1) { animation-delay: 1.4s; }
+        .card:nth-child(2) { animation-delay: 1.6s; }
+        .card:nth-child(3) { animation-delay: 1.8s; }
+        .card:nth-child(4) { animation-delay: 2.0s; }
+        .card:nth-child(5) { animation-delay: 2.2s; }
+        .card:nth-child(6) { animation-delay: 2.4s; }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .card a {
+            text-decoration: none;
+        }
+
+        .image {
+            object-fit: cover;
+            width: 100%;
+            height: 250px;
+            background-color: rgb(239, 205, 255);
+            border-radius: 0.5rem 0.5rem 0 0;
+            overflow: hidden;
+        }
+
+        .image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .title {
+            color: #111827;
+            font-size: 1.5rem;
+            line-height: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .desc {
+            margin-top: 0.5rem;
+            color: #6B7280;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            margin-bottom: 1rem;
+            flex: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            line-clamp: 4;
+            -webkit-box-orient: vertical;
+        }
+
+        .action {
+            display: inline-flex;
+            margin-top: auto;
+            color: #ffffff;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: 500;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #2563EB;
+            padding: 12px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+        }
+
+        .action:hover {
+            background-color: #1d4ed8;
+        }
+
+        .action span {
+            transition: .3s ease;
+        }
+
+        .action:hover span {
+            transform: translateX(4px);
+        }
+
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) rotate(-10deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1) rotate(5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes expandWidth {
+            from {
+                opacity: 0;
+                transform: scaleX(0);
+            }
+            to {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Loading animation for service cards */
+        .loading-message {
+            animation: pulse 2s infinite;
+        }
+
+        /* Search functionality styles */
+        #serviceSearch:focus {
+            border-color: #2c3e50 !important;
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+        }
+
+        #categoryFilter:hover,
+        #priceFilter:hover {
+            border-color: #2c3e50;
+        }
+
+        #categoryFilter:focus,
+        #priceFilter:focus {
+            border-color: #2c3e50;
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+        }
+
+        #resetFilters:hover {
+            background-color: #f8f9fa !important;
+            border-color: #2c3e50 !important;
+        }
+
+        #clearSearch:hover {
+            color: #2c3e50 !important;
+        }
+
+        /* No results message */
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #7f8c8d;
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .no-results h3 {
+            margin: 0 0 0.5rem 0;
+            color: #3f3b57;
+        }
+
+        .no-results p {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+
+
+
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .service-page {
+                padding: 40px 15px;
+            }
+
+            .service-container {
+                padding: 0 15px;
+            }
+
+            .service-title h1 {
+                font-size: 2.5rem;
+            }
+
+            .service-title i {
+                font-size: 2rem;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+                padding: 0 5px;
+            }
+            
+            .card {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .service-page {
+                padding: 30px 10px;
+            }
+
+            .service-container {
+                padding: 0 10px;
+            }
+
+            .service-title h1 {
+                font-size: 2rem;
+            }
+
+            .service-subtitle {
+                font-size: 1rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 0 5px;
+            }
+            
+            .card {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        .dashboard__footer {
+    background: #3f3b57;
+    padding: 1rem 0;
+    margin-top: 4rem;
+    color: white;
+}
+
+.footer__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1rem;
+}
+
+.footer__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+}
+
+.footer__logo img {
+    width: 50px;
+    height: 50px;
+}
+
+.footer__copyright {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.8rem;
+}
+
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            padding: 2rem 0;
+            box-sizing: border-box;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+        
+        .modal.active {
+            display: flex !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav__header">
+            <div class="nav__logo">
+                <img src="assets/logo.png" alt="Pet Place Logo" class="logo-img">
+            </div>
+            <div class="nav__menu__btn" id="menu-btn">
+                <i class="ri-menu-line"></i>
+            </div>
+        </div>
+        <ul class="nav__links" id="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="services.html" class="nav-active">Services</a></li>
+            <li class="nav__login-item">
+                <div
+                    aria-label="User Login Button"
+                    tabindex="0"
+                    role="button"
+                    class="user-profile"
+                >
+                    <div class="user-profile-inner">
+                        <svg
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                        >
+                            <g data-name="Layer 2" id="Layer_2">
+                                <path
+                                    d="m15.626 11.769a6 6 0 1 0 -7.252 0 9.008 9.008 0 0 0 -5.374 8.231 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 9.008 9.008 0 0 0 -5.374-8.231zm-7.626-4.769a4 4 0 1 1 4 4 4 4 0 0 1 -4-4zm10 14h-12a1 1 0 0 1 -1-1 7 7 0 0 1 14 0 1 1 0 0 1 -1 1z"
+                                ></path>
+                            </g>
+                        </svg>
+                        <p>Log In</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Service Page Content -->
+    <div class="service-page">
+        <div class="service-container">
+            <!-- Header Section -->
+            <div class="service-header">
+                <div class="service-title">
+                    <i class="ri-paw-print-fill"></i>
+                    <h1>Pet Care Services</h1>
+                </div>
+                <p class="service-subtitle">Professional care for your beloved pets</p>
+                <div class="service-divider"></div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="search-section" style="margin-bottom: 2rem; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.8s ease-out 1.4s forwards;">
+                <div class="search-container" style="max-width: 600px; margin: 0 auto; position: relative;">
+                    <div class="search-input-wrapper" style="position: relative; display: flex; align-items: center;">
+                        <i class="ri-search-line" style="position: absolute; left: 15px; color: #7f8c8d; font-size: 1.2rem; z-index: 2;"></i>
+                        <input type="text" id="serviceSearch" placeholder="Search services by name, category, or description..." 
+                               style="width: 100%; padding: 15px 15px 15px 50px; border: 2px solid #e0e0e0; border-radius: 25px; font-size: 1rem; background: white; transition: all 0.3s ease; outline: none;">
+                        <button id="clearSearch" style="position: absolute; right: 15px; background: none; border: none; color: #7f8c8d; font-size: 1.2rem; cursor: pointer; display: none; z-index: 2;">
+                            <i class="ri-close-line"></i>
+                        </button>
+                    </div>
+                    <div class="search-filters" style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                        <select id="categoryFilter" style="padding: 8px 15px; border: 2px solid #e0e0e0; border-radius: 20px; background: white; color: #3f3b57; font-size: 0.9rem; cursor: pointer; outline: none;">
+                            <option value="">All Categories</option>
+                        </select>
+                        <select id="priceFilter" style="padding: 8px 15px; border: 2px solid #e0e0e0; border-radius: 20px; background: white; color: #3f3b57; font-size: 0.9rem; cursor: pointer; outline: none;">
+                            <option value="">All Prices</option>
+                            <option value="0-50">Under RM50</option>
+                            <option value="50-100">RM50 - RM100</option>
+                            <option value="100-200">RM100 - RM200</option>
+                            <option value="200+">Above RM200</option>
+                        </select>
+                        <button id="resetFilters" style="padding: 8px 15px; border: 2px solid #e0e0e0; border-radius: 20px; background: white; color: #3f3b57; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease;">
+                            <i class="ri-refresh-line" style="margin-right: 0.3rem;"></i>Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services Grid -->
+            <div class="services-grid" id="servicesGrid">
+                <!-- Loading message -->
+                <div class="loading-message" style="text-align: center; padding: 2rem; color: #7f8c8d; grid-column: 1 / -1;">
+                    <i class="ri-loader-4-line" style="font-size: 2rem; animation: spin 1s linear infinite;"></i>
+                    <p>Loading services...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="dashboard__footer">
+        <div class="footer__container">
+            <div class="footer__logo">
+                <img src="assets/logo.png" alt="CatsWell Logo">
+            </div>
+            <div class="footer__copyright">
+                © 2025 Catswell Pet Care Management. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal__overlay" id="modalOverlay"></div>
+        <div class="modal__content">
+          <!-- Login Form -->
+          <div class="form-container" id="loginForm">
+            <!-- Close Button -->
+            <button class="modal__close" id="modalClose">
+              <i class="ri-close-line"></i>
+            </button>
+            
+            <!-- Catswell Logo -->
+            <div class="auth-logo">
+              <img src="assets/logo.png" alt="Catswell Logo">
+            </div>
+            
+            <!-- Error Message -->
+            <div id="loginMessage" class="message error" style="display: none;">
+              Firebase: Error (auth/invalid-credential).
+            </div>
+            
+            <form class="form" id="loginFormElement">
+              <input type="hidden" name="action" value="login">
+              <div class="input-group">
+                <label for="username">Email Address</label>
+                <input type="email" name="username" id="username" placeholder="Enter your email" required autocomplete="email">
+              </div>
+              <div class="input-group">
+                <label for="password">Password</label>
+                <div class="password-input-container">
+                  <input type="password" name="password" id="password" placeholder="Enter Your password" required autocomplete="current-password">
+                  <button type="button" class="password-toggle" id="passwordToggle" onclick="togglePassword()">
+                    <i class="ri-eye-off-line" id="passwordToggleIcon"></i>
+                  </button>
+                </div>
+                
+              </div>
+              <button type="submit" class="sign">Sign in</button>
+            </form>
+            
+            <!-- Google Sign-In Button -->
+            <div class="google-signin-container">
+              <button type="button" class="google-signin-btn" onclick="signInWithGoogle()">
+                <svg class="google-logo" width="18" height="18" viewBox="0 0 24 24">
+                  <path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Continue with Google
+              </button>
+            </div>
+            
+            <!-- Divider -->
+            <div class="divider">
+              <span>or</span>
+            </div>
+            
+            <!-- Community Message -->
+            <div class="social-message">
+              <div class="line"></div>
+              <p class="message">Be Part of Our Community Now!</p>
+              <div class="line"></div>
+            </div>
+            
+            
+            <!-- User Manual trigger -->
+            <div class="social-message" style="margin-top: 0.3rem;">
+              <div class="line"></div>
+              <p class="message"><button type="button" onclick="openUserManual()" style="background:#3b82f6;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;">User Manual</button></p>
+              <div class="line"></div>
+            </div>
+
+            <!-- Demo Accounts Section -->
+            <div class="demo-accounts">
+              <div class="social-message">
+                <div class="line"></div>
+                <p class="message">Demo Accounts</p>
+                <div class="line"></div>
+              </div>
+              <ul class="demo-list">
+                <li><span class="role">Admin:</span> <span class="cred">Use <a href="admin-login.html" style="font-weight: bold; color: inherit; text-decoration: underline;">Admin Login Page</a></span></li>
+                <li><span class="role">User:</span> <span class="cred">user@example.com</span> • <span class="cred">user123</span></li>
+              </ul>
+            </div>
+            <p class="signup">Don't have an account?
+              <a rel="noopener noreferrer" href="#" class="" id="showSignup">Sign up</a>
+            </p>
+            
+            
+          </div>
+  
+          <!-- Sign Up Form -->
+          <div class="form-container" id="signupForm" style="display: none;">
+            <!-- Close Button -->
+            <button class="modal__close" id="modalCloseSignup">
+              <i class="ri-close-line"></i>
+            </button>
+            
+            <!-- Catswell Logo -->
+            <div class="auth-logo">
+              <img src="assets/logo.png" alt="Catswell Logo">
+            </div>
+            
+            <div id="signupMessage" class="message" style="display: none;"></div>
+            <form class="form" id="signupFormElement">
+              <input type="hidden" name="action" value="signup">
+              <div class="input-group">
+                <label for="firstname">First Name *</label>
+                <input type="text" name="firstname" id="firstname" placeholder="Enter your first name" required autocomplete="given-name">
+              </div>
+              <div class="input-group">
+                <label for="lastname">Last Name *</label>
+                <input type="text" name="lastname" id="lastname" placeholder="Enter your last name" required autocomplete="family-name">
+              </div>
+              <div class="input-group">
+                <label for="signup-email">Email Address *</label>
+                <input type="email" name="email" id="signup-email" placeholder="Enter your email address" required title="Please enter a valid email address" autocomplete="email">
+              </div>
+              <div class="input-group">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" name="phone" id="phone" placeholder="Enter your phone number" required title="Please enter a valid phone number" oninput="this.value = this.value.replace(/[^0-9+\-\s()]/g, '')" autocomplete="tel">
+              </div>
+              <div class="input-group">
+                <label for="address">Address *</label>
+                <input type="text" name="address" id="address" placeholder="Enter your address" required autocomplete="street-address">
+              </div>
+              <div class="input-group">
+                <label for="signup-password">Password *</label>
+                <div class="password-input-container">
+                  <input type="password" name="signup-password" id="signup-password" placeholder="Enter your password" required minlength="6" title="Password must be at least 6 characters" autocomplete="new-password">
+                  <button type="button" class="password-toggle" id="signupPasswordToggle" onclick="toggleSignupPassword()">
+                    <i class="ri-eye-line" id="signupPasswordToggleIcon"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="input-group">
+                <label for="confirm-password">Confirm Password *</label>
+                <div class="password-input-container">
+                  <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirm your password" required minlength="6" title="Password must be at least 6 characters" autocomplete="new-password">
+                  <button type="button" class="password-toggle" id="confirmPasswordToggle" onclick="toggleConfirmPassword()">
+                    <i class="ri-eye-line" id="confirmPasswordToggleIcon"></i>
+                  </button>
+                </div>
+              </div>
+              <button type="submit" class="sign">Sign up</button>
+            </form>
+            <div class="social-message">
+              <div class="line"></div>
+              <p class="message">Lets Go!</p>
+              <div class="line"></div>
+            </div>
+            
+            <p class="signup">Already have an account?
+              <a rel="noopener noreferrer" href="#" class="" id="showLogin">Login</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+    <!-- User Manual Mini Modal -->
+    <div class="modal" id="userManualModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; align-items: center; justify-content: center; z-index: 10001;">
+      <div class="modal__overlay" onclick="closeUserManual()" style="position:absolute; inset:0; background: rgba(0,0,0,0.45);"></div>
+      <div class="modal__content" style="max-width:720px; width: calc(100% - 32px); padding:0; position: relative; z-index: 10002; background:#ffffff; background-color:#ffffff; border-radius:12px; box-shadow: 0 18px 40px rgba(0,0,0,0.25); overflow:hidden;">
+        <style>
+          #userManualModal .um-header{background:#6d0dcd ;color:#fff;padding:18px 20px;display:flex;align-items:center;gap:10px}
+          #userManualModal .um-header h3{margin:0;font-size:20px;font-weight:700}
+          #userManualModal .um-header p{margin:2px 0 0 0;opacity:.9;font-size:12px}
+          #userManualModal .um-close{position:absolute;right:10px;top:10px;background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+          #userManualModal .um-body{padding:16px; position: relative;}
+          #userManualModal .um-bg{position:absolute; inset:0; background:url('assets/usermanual_bg.png') center/cover no-repeat; opacity:0.25;}
+          #userManualModal .um-inner{position:relative;}
+          #userManualModal .um-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px 0}
+          #userManualModal .booking__action__btn.secondary{background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:9999px}
+          #userManualModal .booking__action__btn.primary{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:9999px}
+          #userManualModal .booking__action__btn:hover{filter:brightness(0.97)}
+          #userManualModal .um-pane .um-card{background:rgba(255,255,255,0.9);border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start}
+          #userManualModal .um-icon{width:36px;height:36px;border-radius:8px;background:#eef2ff;display:flex;align-items:center;justify-content:center;color:#4f46e5;font-size:20px}
+          #userManualModal .um-icon i{font-size:20px;display:inline-block;line-height:1;font-family:'remixicon' !important;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+          #userManualModal .um-card h4{margin:0 0 4px 0;font-size:14px;color:#111827}
+          #userManualModal .um-card p{margin:0;color:#4b5563;font-size:13px;line-height:1.45}
+          #userManualModal .um-footer{display:flex;justify-content:flex-end;gap:8px;padding:12px 16px;border-top:1px solid #f1f5f9;background:#fff}
+        </style>
+        <div class="um-header">
+          <div style="flex:1;">
+            <h3>User Manual</h3>
+            <p>Quick help to get you started</p>
+          </div>
+          <button class="um-close" onclick="closeUserManual()"><i class="ri-close-line"></i></button>
+        </div>
+        <div class="um-body">
+          <div class="um-bg"></div>
+          <div class="um-inner">
+          <div class="um-tabs booking__actions">
+            <button class="booking__action__btn secondary" id="umTabGettingStarted" onclick="showUMTab('getting')"><i class="ri-rocket-2-line"></i> Getting Started</button>
+            <button class="booking__action__btn secondary" id="umTabGuide" onclick="showUMTab('guide')"><i class="ri-calendar-check-line"></i> Booking Guide</button>
+            <button class="booking__action__btn secondary" id="umTabFaq" onclick="showUMTab('faq')"><i class="ri-question-answer-line"></i> FAQ</button>
+          </div>
+          <div id="umPaneGetting" class="um-pane">
+            <div class="um-card"><div class="um-icon"><i class="ri-user-add-line"></i></div><div><h4>Create your account</h4><p>Sign up or log in using your email or Google.</p></div></div>
+            <div class="um-card"><div class="um-icon"><i class="ri-medal-line"></i></div><div><h4>Add your pet</h4><p>Go to Dashboard → My Pets and add pet details and photo.</p></div></div>
+            <div class="um-card"><div class="um-icon"><i class="ri-store-2-line"></i></div><div><h4>Explore services</h4><p>Browse grooming or hotel services, then pick a suitable slot.</p></div></div>
+          </div>
+          <div id="umPaneGuide" class="um-pane" style="display:none;">
+            <div class="um-card"><div class="um-icon"><i class="ri-calendar-line"></i></div><div><h4>Pick date & time</h4><p>Choose your preferred date and time for the selected service.</p></div></div>
+            <div class="um-card"><div class="um-icon"><i class="ri-file-list-line"></i></div><div><h4>Select pet(s)</h4><p>Choose the pet you added. You can include additional pets if supported.</p></div></div>
+            <div class="um-card"><div class="um-icon"><i class="ri-mail-send-line"></i></div><div><h4>Confirm booking</h4><p>Submit to receive a confirmation email. View status in Dashboard → Bookings.</p></div></div>
+          </div>
+          <div id="umPaneFaq" class="um-pane" style="display:none;">
+            <div class="um-card"><div class="um-icon"><i class="ri-mail-close-line"></i></div><div><h4>Didn't get email?</h4><p>Check spam, then verify your email in Profile. You can also re-send from the booking view.</p></div></div>
+            <div class="um-card"><div class="um-icon"><i class="ri-time-line"></i></div><div><h4>Change time?</h4><p>Contact support or cancel and rebook a new slot from your Dashboard.</p></div></div>
+            <div class="um-card"><div class="um-icon"><i class="ri-question-line"></i></div><div><h4>Need help?</h4><p>Use the chat widget or email us via the Contact section in the footer.</p></div></div>
+          </div>
+          </div>
+        </div>
+        <div class="um-footer">
+          <button class="booking__action__btn secondary" onclick="closeUserManual()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function openUserManual(){
+        const m = document.getElementById('userManualModal');
+        if(!m) return; 
+        m.style.display='flex'; 
+        // Lock scroll only if login modal is not already open (which already locks scroll)
+        const loginModal = document.getElementById('loginModal');
+        const isLoginModalOpen = loginModal && (loginModal.style.display === 'flex' || loginModal.classList.contains('active') || window.getComputedStyle(loginModal).display === 'flex');
+        if(!isLoginModalOpen) {
+          document.body.style.overflow = 'hidden';
+          document.body.classList.add('modal-open');
+        }
+        // default tab
+        showUMTab('getting');
+      }
+      function closeUserManual(){
+        const m = document.getElementById('userManualModal');
+        if(!m) return; 
+        m.style.display='none'; 
+        // Only restore scroll if login modal is not open
+        const loginModal = document.getElementById('loginModal');
+        const isLoginModalOpen = loginModal && (loginModal.style.display === 'flex' || loginModal.classList.contains('active') || window.getComputedStyle(loginModal).display === 'flex');
+        if(!isLoginModalOpen) {
+          document.body.style.overflow = '';
+          document.body.classList.remove('modal-open');
+        }
+      }
+      function showUMTab(which){
+        const panes = { getting: 'umPaneGetting', guide: 'umPaneGuide', faq: 'umPaneFaq' };
+        Object.values(panes).forEach(id=>{ const el=document.getElementById(id); if(el){ el.style.display='none'; }});
+        const activeId = panes[which]; const active = document.getElementById(activeId); if(active){ active.style.display='block'; }
+        // button active styles
+        const btns = { getting: 'umTabGettingStarted', guide: 'umTabGuide', faq: 'umTabFaq' };
+        Object.values(btns).forEach(id=>{ const b=document.getElementById(id); if(b){ b.classList.remove('primary'); b.classList.add('secondary'); }});
+        const ab = document.getElementById(btns[which]); if(ab){ ab.classList.remove('secondary'); ab.classList.add('primary'); }
+      }
+    </script>
+
+   
+    <!-- Include main.js for login modal functionality -->
+    <script src="main.js"></script>
+    
+    <script>
+        // Navigation functionality
+        const menuBtn = document.getElementById('menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('nav__links--active');
+        });
+
+        // Book Service function - redirect to booking page
+        function bookService(serviceId) {
+            if (window.isUserLoggedIn) {
+                // User is logged in, redirect to booking page
+                window.location.href = 'booking_services.html';
+            } else {
+                // User not logged in, show login modal
+                openLoginModal();
+            }
+        }
+
+        // Scroll to top function
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Global variables for search functionality
+        let allServices = [];
+        let filteredServices = [];
+
+        // Format category name to display properly
+        function formatCategoryName(category) {
+            if (!category) return '';
+            
+            // Handle the new service category format (GROOMING SERVICE, CAT HOTEL, A LA CARTE SERVICE)
+            if (category === 'GROOMING SERVICE') return 'Grooming Service';
+            if (category === 'CAT HOTEL') return 'Cat Hotel';
+            if (category === 'A LA CARTE SERVICE') return 'A La Carte Service';
+            
+            // Fallback for other categories - replace underscores with spaces and capitalize each word
+            return category
+                .replace(/_/g, ' ')
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                .join(' ');
+        }
+
+        // Format detailed prices for service cards
+        function formatDetailedPrices(priceData) {
+            // Handle JSON string from database
+            if (typeof priceData === 'string') {
+                try {
+                    priceData = JSON.parse(priceData);
+                } catch (e) {
+                    console.error('Error parsing price_data JSON:', e);
+                    return 'Price data error';
+                }
+            }
+            
+            if (!priceData || !Array.isArray(priceData) || priceData.length === 0) {
+                return 'Contact for pricing';
+            }
+            
+            // Show all prices in the requested format: CATEGORY WEIGHT (RMXX)
+            let priceText = priceData.map(p => {
+                const category = formatCategoryName(p.category);
+                let weight = p.weight || '';
+                // Add KG unit if weight exists and doesn't already contain it
+                if (weight && !weight.toUpperCase().includes('KG')) {
+                    weight = weight + ' KG';
+                }
+                const weightDisplay = weight ? ` ${weight}` : '';
+                return `${category.toUpperCase()}${weightDisplay} (RM${p.price})`;
+            }).join(', ');
+            
+            return priceText;
+        }
+
+        // Load services from database
+        async function loadServices() {
+            try {
+                const response = await fetch('pet_services.php?action=list');
+                const result = await response.json();
+                
+                if (result.success && Array.isArray(result.data)) {
+                    allServices = result.data;
+                    filteredServices = [...allServices];
+                    displayServices(filteredServices);
+                    populateCategoryFilter();
+                } else {
+                    console.error('Failed to load services:', result.message);
+                    // Initialize empty arrays to prevent errors
+                    allServices = [];
+                    filteredServices = [];
+                    displayServices([]);
+                    showErrorMessage('Failed to load services. Please try again later.');
+                }
+            } catch (error) {
+                console.error('Error loading services:', error);
+                // Initialize empty arrays to prevent errors
+                allServices = [];
+                filteredServices = [];
+                displayServices([]);
+                showErrorMessage('Error loading services. Please check your connection.');
+            }
+        }
+
+        // Populate category filter dropdown
+        function populateCategoryFilter() {
+            const categoryFilter = document.getElementById('categoryFilter');
+            
+            // Safety check for allServices
+            if (!allServices || !Array.isArray(allServices)) {
+                console.warn('allServices is not properly initialized');
+                allServices = [];
+                return;
+            }
+            
+            // Get unique service categories (not pet categories)
+            const categories = [...new Set(allServices.map(service => service.service_category).filter(Boolean))];
+            
+            // Clear existing options except "All Categories"
+            categoryFilter.innerHTML = '<option value="">All Categories</option>';
+            
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = formatCategoryName(category);
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        // Search functionality
+        function searchServices() {
+            const searchTerm = document.getElementById('serviceSearch').value.toLowerCase().trim();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const priceFilter = document.getElementById('priceFilter').value;
+            
+            filteredServices = allServices.filter(service => {
+                // Text search
+                const matchesSearch = !searchTerm || 
+                    service.service_name.toLowerCase().includes(searchTerm) ||
+                    (service.description && service.description.toLowerCase().includes(searchTerm)) ||
+                    (service.cat_hotel_category && service.cat_hotel_category.toLowerCase().includes(searchTerm)) ||
+                    (service.breed_notes && service.breed_notes.toLowerCase().includes(searchTerm)) ||
+                    (service.notes && service.notes.toLowerCase().includes(searchTerm)) ||
+                    (service.service_category && service.service_category.toLowerCase().includes(searchTerm));
+                
+                // Service category filter (not pet category)
+                const matchesCategory = !categoryFilter || service.service_category === categoryFilter;
+                
+                // Price filter
+                let matchesPrice = true;
+                if (priceFilter) {
+                    // Try to get price from price_data JSON first, then fallback to service.price
+                    let price = parseFloat(service.price) || 0;
+                    
+                    // If price_data exists, get the minimum price from the array
+                    if (service.price_data) {
+                        try {
+                            const priceData = typeof service.price_data === 'string' 
+                                ? JSON.parse(service.price_data) 
+                                : service.price_data;
+                            if (Array.isArray(priceData) && priceData.length > 0) {
+                                const prices = priceData.map(p => parseFloat(p.price) || 0).filter(p => p > 0);
+                                if (prices.length > 0) {
+                                    price = Math.min(...prices); // Use minimum price for filtering
+                                }
+                            }
+                        } catch (e) {
+                            console.warn('Error parsing price_data:', e);
+                        }
+                    }
+                    
+                    switch (priceFilter) {
+                        case '0-50':
+                            matchesPrice = price < 50;
+                            break;
+                        case '50-100':
+                            matchesPrice = price >= 50 && price <= 100;
+                            break;
+                        case '100-200':
+                            matchesPrice = price > 100 && price <= 200;
+                            break;
+                        case '200+':
+                            matchesPrice = price > 200;
+                            break;
+                    }
+                }
+                
+                return matchesSearch && matchesCategory && matchesPrice;
+            });
+            
+            displayServices(filteredServices);
+            updateSearchUI();
+        }
+
+        // Update search UI elements
+        function updateSearchUI() {
+            const searchInput = document.getElementById('serviceSearch');
+            const clearButton = document.getElementById('clearSearch');
+            
+            if (searchInput.value.trim()) {
+                clearButton.style.display = 'block';
+            } else {
+                clearButton.style.display = 'none';
+            }
+        }
+
+        // Clear search
+        function clearSearch() {
+            document.getElementById('serviceSearch').value = '';
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('priceFilter').value = '';
+            filteredServices = [...allServices];
+            displayServices(filteredServices);
+            updateSearchUI();
+        }
+
+        // Reset all filters
+        function resetFilters() {
+            clearSearch();
+        }
+
+        // Display services in the UI grouped by service category
+        function displayServices(services) {
+            const servicesGrid = document.getElementById('servicesGrid');
+            
+            if (services.length === 0) {
+                const searchTerm = document.getElementById('serviceSearch').value.trim();
+                const categoryFilter = document.getElementById('categoryFilter').value;
+                const priceFilter = document.getElementById('priceFilter').value;
+                
+                if (searchTerm || categoryFilter || priceFilter) {
+                    // No results from search/filter
+                    servicesGrid.innerHTML = `
+                        <div class="no-results">
+                            <i class="ri-search-line"></i>
+                            <h3>No Services Found</h3>
+                            <p>Try adjusting your search criteria or filters to find what you're looking for.</p>
+                            <button onclick="resetFilters()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                Clear All Filters
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    // No services available at all
+                servicesGrid.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #7f8c8d; grid-column: 1 / -1;">
+                        <i class="ri-inbox-line" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <h3>No Services Available</h3>
+                        <p>Check back later for our pet care services!</p>
+                    </div>
+                `;
+                }
+                return;
+            }
+
+            // Group services by service category (not pet category)
+            const servicesByCategory = {};
+            services.forEach(service => {
+                const category = service.service_category || 'other';
+                if (!servicesByCategory[category]) {
+                    servicesByCategory[category] = [];
+                }
+                servicesByCategory[category].push(service);
+            });
+
+            // Clear the grid
+            servicesGrid.innerHTML = '';
+            
+            // Display each service category
+            Object.keys(servicesByCategory).forEach(categoryKey => {
+                const categoryServices = servicesByCategory[categoryKey];
+                const categoryName = formatCategoryName(categoryKey);
+                
+                // Create services for this category (category header removed)
+                categoryServices.forEach(service => {
+                const serviceCard = document.createElement('div');
+                serviceCard.className = 'card';
+                
+                // Format price using new multiple price format
+                const price = formatDetailedPrices(service.price_data || [{ category: 'general', price: service.price || 0 }]);
+                
+                // Format duration
+                const duration = formatDuration(service.duration_minutes, service.duration_unit);
+                
+                serviceCard.innerHTML = `
+                    <div class="image">
+                        ${service.image_url ? 
+                            `<img src="${service.image_url}" alt="${service.service_name}" onerror="this.src='https://images.unsplash.com/photo-1551717743-49959800b1f6?w=500&h=300&fit=crop'">` : 
+                            `<img src="https://images.unsplash.com/photo-1551717743-49959800b1f6?w=500&h=300&fit=crop" alt="${service.service_name}">`
+                        }
+                    </div>
+                    <div class="content">
+                        <div>
+                            <a href="#" onclick="bookService('${service.id}'); return false;">
+                                <span class="title">${service.service_name}</span>
+                            </a>
+                                ${service.description ? `<p class="desc">${service.description}</p>` : ''}
+                                
+                                <!-- Service Details -->
+                                <div class="service-details" style="margin: 0.5rem 0; font-size: 0.8rem;">
+                                    <div style="display: flex; align-items: center; margin-bottom: 0.3rem;">
+                                        <i class="ri-money-dollar-circle-line" style="margin-right: 0.3rem; color: #2c3e50;"></i>
+                                        <span style="font-weight: 600; color: #111827;">${price}</span>
+                                    </div>
+                                    ${duration ? `
+                                    <div style="display: flex; align-items: center; margin-bottom: 0.3rem;">
+                                        <i class="ri-time-line" style="margin-right: 0.3rem; color: #2c3e50;"></i>
+                                        <span style="color: #6B7280;">${duration}</span>
+                                    </div>
+                                    ` : ''}
+                                    ${service.pet_category ? `
+                                    <div style="display: flex; align-items: center; margin-bottom: 0.3rem;">
+                                        <i class="ri-paw-print-line" style="margin-right: 0.3rem; color: #2c3e50;"></i>
+                                        <span style="color: #6B7280;">Pet: ${formatCategoryName(service.pet_category)}</span>
+                                    </div>
+                                    ` : ''}
+                                    ${service.cat_hotel_category ? `
+                                    <div style="display: flex; align-items: center; margin-bottom: 0.3rem;">
+                                        <i class="ri-hotel-bed-line" style="margin-right: 0.3rem; color: #2c3e50;"></i>
+                                        <span style="color: #6B7280;">${formatCategoryName(service.cat_hotel_category)}</span>
+                                    </div>
+                                    ` : ''}
+                                    ${service.breed_notes ? `
+                                    <div style="display: flex; align-items: center; margin-bottom: 0.3rem;">
+                                        <i class="ri-paw-print-line" style="margin-right: 0.3rem; color: #2c3e50;"></i>
+                                        <span style="color: #6B7280;">${service.breed_notes}</span>
+                                    </div>
+                                    ` : ''}
+                                    ${service.notes ? `
+                                    <div style="display: flex; align-items: flex-start; margin-bottom: 0.3rem;">
+                                        <i class="ri-file-text-line" style="margin-right: 0.3rem; color: #2c3e50; margin-top: 0.1rem;"></i>
+                                        <span style="color: #6B7280; font-size: 0.75rem;">${service.notes}</span>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                        </div>
+                        <a class="action" href="#" onclick="${window.isUserLoggedIn ? "bookService('${service.id}'); return false;" : "scrollToTop(); return false;"}">
+                            ${window.isUserLoggedIn ? 'Book Now' : 'Find out more'}
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
+                `;
+                
+                servicesGrid.appendChild(serviceCard);
+                });
+            });
+        }
+
+        // Note: formatCategoryName is already defined above (line 853)
+
+        // Format duration from minutes to readable format
+        function formatDuration(minutes, unit = null) {
+            if (!minutes || minutes <= 0) return '';
+            
+            // If unit is provided, use it for display
+            if (unit) {
+                switch(unit) {
+                    case 'minutes':
+                        return `${minutes} min`;
+                    case 'hours':
+                        const hours = Math.floor(minutes / 60);
+                        return `${hours} hour${hours > 1 ? 's' : ''}`;
+                    case 'days':
+                        const days = Math.floor(minutes / 1440);
+                        return `${days} day${days > 1 ? 's' : ''}`;
+                    case 'nights':
+                        const nights = Math.floor(minutes / 1440);
+                        return `${nights} night${nights > 1 ? 's' : ''}`;
+                }
+            }
+            
+            // Fallback to automatic conversion
+            if (minutes < 60) {
+                return `${minutes} min`;
+            } else if (minutes < 1440) {
+                const hours = Math.floor(minutes / 60);
+                const remainingMinutes = minutes % 60;
+                return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}min` : `${hours} hours`;
+            } else {
+                const days = Math.floor(minutes / 1440);
+                return `${days} day${days > 1 ? 's' : ''}`;
+            }
+        }
+
+        // Show error message
+        function showErrorMessage(message) {
+            const servicesGrid = document.getElementById('servicesGrid');
+            servicesGrid.innerHTML = `
+                <div style="text-align: center; padding: 2rem; color: #e74c3c; grid-column: 1 / -1;">
+                    <i class="ri-error-warning-line" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <h3>Error Loading Services</h3>
+                    <p>${message}</p>
+                    <button onclick="loadServices()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
+
+        // Check login status and update navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load services from database
+            loadServices();
+            
+            // Initialize scroll animations
+            initScrollAnimations();
+            
+            // Initialize search functionality
+            initSearchFunctionality();
+            
+            // Generate unique tab session ID (unique per browser tab)
+            let tabSessionId = sessionStorage.getItem('tab_session_id');
+            if (!tabSessionId) {
+                tabSessionId = 'tab_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sessionStorage.setItem('tab_session_id', tabSessionId);
+            }
+            
+            fetch('auth.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=check_login&tab_session_id=' + encodeURIComponent(tabSessionId)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.logged_in) {
+                    // Set global login status
+                    window.isUserLoggedIn = true;
+                    
+                    // Update login button to show "Welcome, [firstname]"
+                    const loginItem = document.querySelector('.nav__login-item');
+                    if (loginItem) {
+                        const firstName = data.first_name || 'User';
+                        loginItem.innerHTML = `
+                            <div aria-label="User Profile" tabindex="0" role="button" class="user-profile" style="width:auto;" onclick="window.location.href='cust-dashboard.html'">
+                                <div class="user-profile-inner" style="width:auto; padding:0 12px; white-space:nowrap; max-width:none;">
+                                    <i class="ri-user-3-fill"></i>
+                                    <span>Welcome, ${firstName}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    // Refresh services display to show "Book Now" buttons
+                    displayServices(filteredServices);
+                } else {
+                    // Set global login status
+                    window.isUserLoggedIn = false;
+                    
+                    // User is not logged in - ensure login button opens modal
+                    console.log('User not logged in or session expired:', data.message);
+                    
+                    // Add click handler to login button to open modal (only if not already added)
+                    const loginButton = document.querySelector('.user-profile');
+                    if (loginButton && !loginButton.hasAttribute('data-modal-handler-added')) {
+                        loginButton.setAttribute('data-modal-handler-added', 'true');
+                        loginButton.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            openLoginModal();
+                        });
+                    }
+                    
+                    // Refresh services display to show "Find out more" buttons
+                    displayServices(filteredServices);
+                }
+            })
+            .catch(error => {
+                console.log('Login check failed:', error);
+                // Set global login status to false
+                window.isUserLoggedIn = false;
+                
+                // Keep default login button if check fails (only if not already added)
+                const loginButton = document.querySelector('.user-profile');
+                if (loginButton && !loginButton.hasAttribute('data-modal-handler-added')) {
+                    loginButton.setAttribute('data-modal-handler-added', 'true');
+                    loginButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        openLoginModal();
+                    });
+                }
+                
+                // Refresh services display to show "Find out more" buttons
+                displayServices(filteredServices);
+            });
+        });
+        
+        // Initialize scroll-triggered animations
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe service cards for scroll animations
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+        }
+
+        // Initialize search functionality
+        function initSearchFunctionality() {
+            const searchInput = document.getElementById('serviceSearch');
+            const clearButton = document.getElementById('clearSearch');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const priceFilter = document.getElementById('priceFilter');
+            const resetButton = document.getElementById('resetFilters');
+
+            // Search input event listeners
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    searchServices();
+                    updateSearchUI();
+                });
+
+                searchInput.addEventListener('focus', function() {
+                    this.style.borderColor = '#2c3e50';
+                });
+
+                searchInput.addEventListener('blur', function() {
+                    this.style.borderColor = '#e0e0e0';
+                });
+            }
+
+            // Clear search button
+            if (clearButton) {
+                clearButton.addEventListener('click', clearSearch);
+            }
+
+            // Filter dropdowns
+            if (categoryFilter) {
+                categoryFilter.addEventListener('change', searchServices);
+            }
+
+            if (priceFilter) {
+                priceFilter.addEventListener('change', searchServices);
+            }
+
+            // Reset button
+            if (resetButton) {
+                resetButton.addEventListener('click', resetFilters);
+                resetButton.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f8f9fa';
+                    this.style.borderColor = '#2c3e50';
+                });
+                resetButton.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = 'white';
+                    this.style.borderColor = '#e0e0e0';
+                });
+            }
+        }
+
+        // Function to open login modal - unified approach
+        function openLoginModal() {
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal) {
+                // First, reset everything to ensure clean state
+                const loginForm = document.getElementById('loginForm');
+                const signupForm = document.getElementById('signupForm');
+                const loginFormElement = document.getElementById('loginFormElement');
+                const signupFormElement = document.getElementById('signupFormElement');
+                
+                // Reset forms and clear any validation states
+                if (loginFormElement) {
+                    loginFormElement.reset();
+                    const loginInputs = loginFormElement.querySelectorAll('input');
+                    loginInputs.forEach(input => {
+                        input.classList.remove('error', 'invalid');
+                        input.style.borderColor = '';
+                    });
+                }
+                
+                if (signupFormElement) {
+                    signupFormElement.reset();
+                    const signupInputs = signupFormElement.querySelectorAll('input');
+                    signupInputs.forEach(input => {
+                        input.classList.remove('error', 'invalid');
+                        input.style.borderColor = '';
+                    });
+                }
+                
+                // Clear error messages
+                const loginMessage = document.getElementById('loginMessage');
+                const signupMessage = document.getElementById('signupMessage');
+                if (loginMessage) {
+                    loginMessage.style.display = 'none';
+                    loginMessage.textContent = '';
+                    loginMessage.className = 'message';
+                }
+                if (signupMessage) {
+                    signupMessage.style.display = 'none';
+                    signupMessage.textContent = '';
+                    signupMessage.className = 'message';
+                }
+                
+                // Ensure only login form is visible, hide signup form
+                if (loginForm) {
+                    loginForm.style.display = 'block';
+                    loginForm.style.visibility = 'visible';
+                    loginForm.style.opacity = '1';
+                    loginForm.classList.add('active');
+                }
+                if (signupForm) {
+                    signupForm.style.display = 'none';
+                    signupForm.style.visibility = 'hidden';
+                    signupForm.style.opacity = '0';
+                    signupForm.classList.remove('active');
+                }
+                
+                // Show modal
+                loginModal.style.cssText = `
+                    position: fixed !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    z-index: 9999 !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    backdrop-filter: none !important;
+                    filter: none !important;
+                `;
+                
+                // Ensure modal content is visible
+                const modalContent = loginModal.querySelector('.modal__content');
+                if (modalContent) {
+                    modalContent.style.cssText = `
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        z-index: 10000 !important;
+                        position: relative !important;
+                    `;
+                }
+                
+                // Lock body scroll
+                document.body.style.overflow = 'hidden';
+                document.body.classList.add('modal-open');
+                
+                loginModal.classList.add('active');
+            }
+        }
+        
+        // Function to close login modal
+        function closeLoginModal() {
+            // Direct implementation to avoid recursion
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal) {
+                loginModal.style.display = 'none';
+                loginModal.classList.remove('active');
+                
+                // Unlock body scroll
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = 'auto';
+                
+                // Properly reset form containers
+                const loginForm = document.getElementById('loginForm');
+                const signupForm = document.getElementById('signupForm');
+                
+                if (loginForm) {
+                    loginForm.style.display = 'block';
+                    loginForm.classList.remove('active');
+                }
+                if (signupForm) {
+                    signupForm.style.display = 'none';
+                    signupForm.classList.remove('active');
+                }
+                
+                // Clear any error messages
+                const loginMessage = document.getElementById('loginMessage');
+                const signupMessage = document.getElementById('signupMessage');
+                if (loginMessage) {
+                    loginMessage.style.display = 'none';
+                    loginMessage.textContent = '';
+                    loginMessage.className = 'message';
+                }
+                if (signupMessage) {
+                    signupMessage.style.display = 'none';
+                    signupMessage.textContent = '';
+                    signupMessage.className = 'message';
+                }
+                
+                // Clear all form fields and reset validation states
+                const loginFormElement = document.getElementById('loginFormElement');
+                const signupFormElement = document.getElementById('signupFormElement');
+                
+                if (loginFormElement) {
+                    loginFormElement.reset();
+                    // Remove any validation classes
+                    const loginInputs = loginFormElement.querySelectorAll('input');
+                    loginInputs.forEach(input => {
+                        input.classList.remove('error', 'invalid');
+                        input.style.borderColor = '';
+                    });
+                }
+                
+                if (signupFormElement) {
+                    signupFormElement.reset();
+                    // Remove any validation classes
+                    const signupInputs = signupFormElement.querySelectorAll('input');
+                    signupInputs.forEach(input => {
+                        input.classList.remove('error', 'invalid');
+                        input.style.borderColor = '';
+                    });
+                }
+            }
+        }
+        
+        // Add event listeners for modal close functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Close login modal when clicking overlay
+            const modalOverlay = document.getElementById('modalOverlay');
+            if (modalOverlay) {
+                modalOverlay.addEventListener('click', closeLoginModal);
+            }
+            
+            // Close login modal when clicking close buttons
+            const modalClose = document.getElementById('modalClose');
+            const modalCloseSignup = document.getElementById('modalCloseSignup');
+            if (modalClose) {
+                modalClose.addEventListener('click', closeLoginModal);
+            }
+            if (modalCloseSignup) {
+                modalCloseSignup.addEventListener('click', closeLoginModal);
+            }
+            
+            // Close modals when pressing Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const loginModal = document.getElementById('loginModal');
+                    
+                    if (loginModal && loginModal.style.display !== 'none') {
+                        closeLoginModal();
+                    }
+                }
+            });
+        });
+
+    </script>
+    
+    <!-- Authentication JavaScript -->
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle form switching between login and signup
+            const showSignupLink = document.getElementById('showSignup');
+            const showLoginLink = document.getElementById('showLogin');
+            
+            if (showSignupLink) {
+                showSignupLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const loginForm = document.getElementById('loginForm');
+                    const signupForm = document.getElementById('signupForm');
+                    
+                    if (loginForm) {
+                        loginForm.style.display = 'none';
+                    }
+                    if (signupForm) {
+                        signupForm.style.display = 'block';
+                        signupForm.style.visibility = 'visible';
+                        signupForm.style.opacity = '1';
+                    }
+                });
+            }
+            
+            if (showLoginLink) {
+                showLoginLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.getElementById('signupForm').style.display = 'none';
+                    document.getElementById('loginForm').style.display = 'block';
+                });
+            }
+        });
+        
+        // Handle login form submission
+        document.getElementById('loginFormElement').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const messageDiv = document.getElementById('loginMessage');
+            
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                let result;
+                const raw = await response.text();
+                try { result = JSON.parse(raw); } catch (_) {
+                    console.error('Non-JSON response from auth.php:', raw);
+                    throw new Error('Server returned an unexpected response. Check PHP errors in XAMPP logs.');
+                }
+                
+                if (result.success) {
+                    messageDiv.textContent = result.message;
+                    messageDiv.className = 'message success';
+                    messageDiv.style.display = 'block';
+                    
+                    // Redirect to dashboard after 1 second
+                    setTimeout(() => {
+                        window.location.href = result.redirect || 'cust-dashboard.html';
+                    }, 1000);
+                } else {
+                    messageDiv.textContent = result.message;
+                    messageDiv.className = 'message error';
+                    messageDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                messageDiv.textContent = 'An error occurred. Please try again.';
+                messageDiv.className = 'message error';
+                messageDiv.style.display = 'block';
+            }
+        });
+        
+        // Handle signup form submission
+        document.getElementById('signupFormElement').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const messageDiv = document.getElementById('signupMessage');
+            
+            // Get form values
+            const firstname = document.getElementById('firstname').value.trim();
+            const lastname = document.getElementById('lastname').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            // Client-side validation
+            if (!firstname || !lastname || !email || !phone || !address || !password || !confirmPassword) {
+                messageDiv.textContent = 'All fields are required!';
+                messageDiv.className = 'message error';
+                messageDiv.style.display = 'block';
+                return;
+            }
+            
+            // Email validation
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailPattern.test(email)) {
+                messageDiv.textContent = 'Please enter a valid email address!';
+                messageDiv.className = 'message error';
+                messageDiv.style.display = 'block';
+                return;
+            }
+            
+            // Phone validation (numbers only)
+            const phonePattern = /^[0-9+\-\s()]+$/;
+            if (!phonePattern.test(phone)) {
+                messageDiv.textContent = 'Phone number can only contain numbers, +, -, spaces, and parentheses!';
+                messageDiv.className = 'message error';
+                messageDiv.style.display = 'block';
+                return;
+            }
+            
+            // Password validation
+            if (password.length < 6) {
+                messageDiv.textContent = 'Password must be at least 6 characters long!';
+                messageDiv.className = 'message error';
+                messageDiv.style.display = 'block';
+                return;
+            }
+            
+            // Confirm password validation
+            if (password !== confirmPassword) {
+                messageDiv.textContent = 'Passwords do not match!';
+                messageDiv.className = 'message error';
+                messageDiv.style.display = 'block';
+                return;
+            }
+            
+            // If validation passes, proceed with form submission
+            const formData = new FormData(this);
+            
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                let result;
+                const raw = await response.text();
+                try { result = JSON.parse(raw); } catch (_) {
+                    console.error('Non-JSON response from auth.php:', raw);
+                    throw new Error('Server returned an unexpected response. Check PHP errors in XAMPP logs.');
+                }
+                
+                if (result.success) {
+                    messageDiv.textContent = result.message;
+                    messageDiv.className = 'message success';
+                    messageDiv.style.display = 'block';
+                    
+                    // Redirect to dashboard after 1 second
+                    setTimeout(() => {
+                        window.location.href = result.redirect || 'cust-dashboard.html';
+                    }, 1000);
+                } else {
+                    messageDiv.textContent = result.message;
+                    messageDiv.className = 'message error';
+                    messageDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                messageDiv.textContent = 'An error occurred. Please try again.';
+                messageDiv.className = 'message error';
+                messageDiv.style.display = 'block';
+            }
+        });
+        
+        // Password toggle functions
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('passwordToggleIcon');
+            const toggleButton = document.getElementById('passwordToggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'ri-eye-off-line';
+                toggleButton.classList.add('revealed');
+                setTimeout(() => toggleButton.classList.remove('revealed'), 600);
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'ri-eye-line';
+            }
+        }
+        
+        function toggleSignupPassword() {
+            const passwordInput = document.getElementById('signup-password');
+            const toggleIcon = document.getElementById('signupPasswordToggleIcon');
+            const toggleButton = document.getElementById('signupPasswordToggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'ri-eye-off-line';
+                toggleButton.classList.add('revealed');
+                setTimeout(() => toggleButton.classList.remove('revealed'), 600);
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'ri-eye-line';
+            }
+        }
+        
+        function toggleConfirmPassword() {
+            const passwordInput = document.getElementById('confirm-password');
+            const toggleIcon = document.getElementById('confirmPasswordToggleIcon');
+            const toggleButton = document.getElementById('confirmPasswordToggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'ri-eye-off-line';
+                toggleButton.classList.add('revealed');
+                setTimeout(() => toggleButton.classList.remove('revealed'), 600);
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'ri-eye-line';
+            }
+        }
+        
+        // Google Sign-In Configuration
+        const GOOGLE_CLIENT_ID = '643080580151-606q4i9cg9ec2e2qjt1j5kn8202tkk9o.apps.googleusercontent.com';
+        
+        // Simple Google Sign-In Popup
+        function signInWithGoogle() {
+            // Simple OAuth popup
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` + 
+                `client_id=${GOOGLE_CLIENT_ID}&` +
+                `redirect_uri=${encodeURIComponent('http://localhost/petcarewebapp/auth.php')}&` +
+                `scope=openid email profile&` +
+                `response_type=code&` +
+                `prompt=select_account`;
+            
+            // Open popup
+            const popup = window.open(authUrl, 'googleSignIn', 'width=500,height=600');
+            
+            if (!popup) {
+                alert('Please allow popups for this site');
+            }
+        }
+    </script>
+</body>
+</html>

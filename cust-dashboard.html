@@ -1,0 +1,2245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catswell - Customer Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Enhanced Image Upload Styles -->
+    <style>
+        /* Enhanced Image Upload */
+        .image-upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .image-upload-area:hover {
+            border-color: #3b82f6;
+            background-color: #f0f9ff;
+        }
+
+        .image-upload-area.dragover {
+            border-color: #3b82f6;
+            background-color: #f0f9ff;
+            transform: scale(1.02);
+        }
+
+        .upload-content i {
+            font-size: 2rem;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-content p {
+            margin: 0.5rem 0;
+            color: #4a5568;
+        }
+
+        .upload-link {
+            color: #3b82f6;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .upload-content small {
+            color: #718096;
+        }
+
+        .enhanced-preview {
+            margin-top: 1rem;
+            position: relative;
+            display: inline-block;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .enhanced-preview img {
+            max-width: 200px;
+            max-height: 200px;
+            width: auto;
+            height: auto;
+            display: block;
+        }
+
+        .preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .enhanced-preview:hover .preview-overlay {
+            opacity: 1;
+        }
+
+        .remove-image-btn,
+        .change-image-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remove-image-btn:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .change-image-btn:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .image-info {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #718096;
+        }
+
+        .image-info span {
+            display: block;
+            margin: 0.25rem 0;
+        }
+
+        /* Enhanced Booking Styles */
+        .booking__item {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .booking__item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .booking__item.pending {
+            border-left-color: #f59e0b;
+        }
+
+        .booking__item.confirmed {
+            border-left-color: #10b981;
+        }
+
+        .booking__item.completed {
+            border-left-color: #3b82f6;
+        }
+
+        .booking__item.cancelled {
+            border-left-color: #ef4444;
+        }
+
+        .booking__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .booking__title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .booking__reference {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .booking__details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .booking__detail {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .booking__detail__label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .booking__detail__value {
+            font-size: 0.875rem;
+            color: #1f2937;
+            font-weight: 500;
+        }
+
+        .booking__actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .booking__action__btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .booking__action__btn.primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .booking__action__btn.primary:hover {
+            background: #2563eb;
+        }
+
+        .booking__action__btn.secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .booking__action__btn.secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .booking__action__btn.danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .booking__action__btn.danger:hover {
+            background: #dc2626;
+        }
+        
+        .booking__action__btn.notes {
+            background: #d69e2e;
+            color: white;
+        }
+        
+        .booking__action__btn.notes:hover {
+            background: #b7791f;
+        }
+
+        .status__legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .status__item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .status__item p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .status__badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status__badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status__badge.confirmed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status__badge.completed {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status__badge.cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 1rem;
+            max-width: 400px;
+            z-index: 10000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid #10b981;
+        }
+
+        .notification.info {
+            border-left: 4px solid #3b82f6;
+        }
+
+        .notification.warning {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .notification.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .notification__header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .notification__title {
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .notification__message {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .notification__close {
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 0;
+            margin-left: auto;
+        }
+
+        /* Enhanced Booking Layout Styles */
+        .booking__title__section {
+            flex: 1;
+        }
+
+        .booking__main__content {
+            margin: 1.5rem 0;
+        }
+
+        .booking__pet__section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pet__info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .pet__photo__container {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .pet__photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pet__photo__placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-size: 1.5rem;
+        }
+
+        .pet__details {
+            flex: 1;
+        }
+
+        .pet__name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0 0 0.25rem 0;
+        }
+
+        .pet__breed {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin: 0 0 0.25rem 0;
+        }
+
+        .pet__category {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .booking__details__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .booking__detail__card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .booking__detail__card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+        }
+
+        .detail__icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #f0f9ff;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .detail__content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .detail__label {
+            display: block;
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail__value {
+            display: block;
+            font-size: 0.875rem;
+            color: #1f2937;
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        .detail__value.price {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #059669;
+        }
+
+        .booking__notes {
+            background: #fefce8;
+            border: 1px solid #fde047;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .notes__header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        .notes__content {
+            margin: 0;
+            font-size: 0.875rem;
+            color: #78350f;
+            line-height: 1.5;
+        }
+
+        /* ULTIMATE OVERRIDE - Force light backgrounds for modals */
+        .modal.receipt-modal .modal__content,
+        .modal.receipt-modal .receipt-modal__content,
+        .modal.booking-details-modal .modal__content,
+        .modal.booking-details-modal .booking-details-modal__content {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+        
+        /* Force all modal content to be white */
+        .receipt-modal .modal__content,
+        .receipt-modal__content,
+        .booking-details-modal .modal__content,
+        .booking-details-modal__content {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+        
+        /* Override any inherited dark backgrounds */
+        .modal__content {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+        }
+        
+        /* Ensure PDF iframe is interactive */
+        .receipt__viewer iframe {
+            pointer-events: auto !important;
+            z-index: 1 !important;
+        }
+        
+        /* Ensure modal overlay doesn't block content */
+        .modal__overlay {
+            pointer-events: auto !important;
+            z-index: 9999 !important;
+        }
+        
+        .modal__content {
+            pointer-events: auto !important;
+            z-index: 10000 !important;
+        }
+        
+        /* Receipt Modal Styles */
+        .receipt-modal {
+            z-index: 10000;
+        }
+        
+        .receipt-modal__content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+        
+        .receipt__viewer {
+            position: relative;
+            background: #f8f9fa;
+        }
+        
+        .receipt__viewer iframe {
+            background: white;
+        }
+        
+        .receipt__viewer img {
+            background: white;
+        }
+        
+        /* PDF Viewer specific styles */
+        .receipt__viewer iframe[src$=".pdf"] {
+            min-height: 500px;
+        }
+        
+        /* Error state styles */
+        .receipt__viewer .error-state {
+            background: #f8f9fa;
+            border: 2px dashed #e2e8f0;
+            border-radius: 8px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .booking__details__grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pet__info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .pet__photo__container {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .booking__actions {
+                flex-direction: column;
+            }
+            
+            .booking__action__btn {
+                justify-content: center;
+            }
+            
+            /* Mobile receipt modal adjustments */
+            .receipt-modal__content {
+                margin: 10px;
+                max-height: calc(100vh - 20px);
+            }
+            
+            .receipt__viewer {
+                height: 60vh !important;
+            }
+            
+            .receipt__viewer iframe {
+                min-height: 400px;
+            }
+        }
+
+        /* All Bookings search input with icons */
+        .search-input-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+        .search-input-wrap i {
+            position: absolute;
+            left: 10px;
+            color: #9ca3af;
+            pointer-events: none;
+            font-size: 1rem;
+        }
+        .search-input {
+            padding: 0.5rem 0.75rem 0.5rem 2rem !important;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            min-width: 180px;
+        }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="nav__header">
+        <div class="nav__logo">
+          <img src="assets/logo.png" alt="Pet Place Logo" class="logo-img">
+        </div>
+        <div class="nav__menu__btn" id="menu-btn">
+          <i class="ri-menu-line"></i>
+        </div>
+      </div>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li class="nav__login-item">
+          <div
+            aria-label="User Profile"
+            tabindex="0"
+            role="button"
+            class="user-profile"
+            style="width:auto;"
+            onclick="openProfileSidebar()"
+          >
+            <div class="user-profile-inner" style="width:auto; padding:0 12px; white-space:nowrap; max-width:none;">
+              <i class="ri-user-3-fill" style="font-size: 1.5rem;"></i>
+              <span id="user-name">Log In</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Profile Sidebar -->
+    <div class="sidebar-overlay" id="profile-sidebar-overlay" style="display: none;"></div>
+    <aside class="sidebar-panel" id="profile-sidebar" aria-hidden="true">
+      <div class="sidebar-header">
+        <h3>Your Profile</h3>
+        <button class="sidebar-close" id="profile-sidebar-close" aria-label="Close Profile Sidebar"><i class="ri-close-line"></i></button>
+      </div>
+      <div class="sidebar-body" id="profile-sidebar-body">
+        <div class="profile-section">
+          <!-- Profile Photo Section -->
+          <div class="profile-photo-section" style="text-align: center; margin-bottom: 10px;">
+            <div class="profile-photo-container" style="width: 80px; height: 80px; border-radius: 50%; background: var(--background-color); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 10px; overflow: hidden; box-shadow: var(--shadow-light);">
+              <img id="profile-photo" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGM0Y0RjYiLz4KPHBhdGggZD0iTTMyIDIwQzM2LjQxODMgMjAgNDAgMjMuNTgxNyA0MCAyOEM0MCAzMi40MTgzIDM2LjQxODMgMzYgMzIgMzZDMjcuNTgxNyAzNiAyNCAzMi40MTgzIDI0IDI4QzI0IDIzLjU4MTcgMjcuNTgxNyAyMCAzMiAyMFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTE2IDQ4QzE2IDQwLjI2ODcgMjIuMjY4NyAzNCAzMCAzNEgzNEM0MS43MzEzIDM0IDQ4IDQwLjI2ODcgNDggNDhWNDhIMTZaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo=" alt="Profile Photo" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div class="profile-photo-actions" style="display: none; gap: 6px; justify-content: center;">
+              <button onclick="uploadProfilePhoto()" style="background: var(--primary-color); color: white; border: none; padding: 3px 6px; border-radius: var(--border-radius); font-size: 10px; cursor: pointer; transition: var(--transition);">
+                <i class="ri-upload-line"></i> Upload
+              </button>
+              <button onclick="deleteProfilePhoto()" style="background: var(--accent-color); color: white; border: none; padding: 3px 6px; border-radius: var(--border-radius); font-size: 10px; cursor: pointer; transition: var(--transition);">
+                <i class="ri-delete-bin-line"></i> Delete
+              </button>
+            </div>
+          </div>
+          
+          <div class="profile-field">
+            <label>First Name</label>
+            <span id="profile-firstname">Loading...</span>
+          </div>
+          <div class="profile-field">
+            <label>Last Name</label>
+            <span id="profile-lastname">Loading...</span>
+          </div>
+          <div class="profile-field">
+            <label>Email Address</label>
+            <span id="profile-email">Loading...</span>
+          </div>
+          <div class="profile-field">
+            <label>Phone Number</label>
+            <span id="profile-phone">Loading...</span>
+          </div>
+          <div class="profile-field">
+            <label>Address</label>
+            <span id="profile-address">Loading...</span>
+          </div>
+        </div>
+        <div class="profile-actions">
+          <button class="btn-edit-profile" onclick="editProfile()">
+            <i class="ri-edit-line"></i> Edit Profile
+          </button>
+          <button class="btn-cancel-edit" onclick="cancelEdit()" style="display: none;">
+            <i class="ri-close-line"></i> Cancel
+          </button>
+          <button class="btn-logout" onclick="closeProfileSidebar(); signOut();">
+            <i class="ri-logout-box-line"></i> Sign Out
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Dashboard Stats -->
+    <section class="dashboard__stats">
+      <div class="section__container">
+            <div class="welcome__section">
+                <div class="welcome__content">
+                    <h1>Welcome back, User!</h1>
+                    <p>Manage your pets and bookings</p>
+                </div>
+                <button class="book__service__btn" onclick="window.location.href='services.html'">
+                    <i class="ri-calendar-line"></i>
+                    Book New Service
+                </button>
+            </div>
+        <div class="stats__grid">
+          <div class="stat__card">
+            <div class="stat__icon">
+                        <i class="fas fa-cat"></i>
+            </div>
+            <div class="stat__content">
+                        <h3 id="total-pets">0</h3>
+              <p>My Pets</p>
+            </div>
+          </div>
+          <div class="stat__card">
+            <div class="stat__icon">
+              <i class="ri-calendar-check-line"></i>
+            </div>
+            <div class="stat__content">
+              <h3 id="upcoming-appointments">0</h3>
+              <p>Upcoming</p>
+            </div>
+          </div>
+          <div class="stat__card">
+            <div class="stat__icon">
+                        <i class="ri-calendar-line"></i>
+            </div>
+            <div class="stat__content">
+              <h3 id="total-bookings">0</h3>
+              <p>Total Bookings</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Dashboard Content -->
+    <section class="dashboard__main">
+      <div class="section__container">
+        <!-- Tab Navigation -->
+            <div class="tab__navigation">
+          <button class="tab__button active" data-tab="pets">My Pets</button>
+          <button class="tab__button" data-tab="bookings">Bookings</button>
+          <button class="tab__button" data-tab="all-bookings">All Booking</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab__content active" id="pets">
+          <div class="pets__section">
+            <div class="section__header">
+              <h2>My Pets</h2>
+                        <p>Manage your pet profiles</p>
+                        <button class="btn__add" onclick="openAddPetModal()">
+                <i class="ri-add-line"></i> Add Pet
+              </button>
+            </div>
+            <div class="pets__grid" id="pets-grid">
+                        <!-- Pet cards will be dynamically loaded from database -->
+            </div>
+          </div>
+        </div>
+
+        <div class="tab__content" id="bookings">
+          <div class="bookings__section">
+            <!-- Active Bookings -->
+            <div class="booking__card">
+              <div class="booking__card__header">
+                <h2>Active Bookings</h2>
+                <p>View your pending and confirmed bookings</p>
+              </div>
+              <div class="booking__card__content" id="pending-bookings-content">
+                <div class="empty__state">
+                  <i class="ri-calendar-line"></i>
+                  <h3>No active bookings</h3>
+                  <button class="btn__primary" onclick="window.location.href='services.html'">Book a Service</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Booking Status Legend -->
+            <div class="booking__card">
+              <div class="booking__card__header">
+                <h2>Booking Status</h2>
+                <p>Understanding your booking status</p>
+              </div>
+              <div class="booking__card__content">
+                <div class="status__legend">
+                  <div class="status__item">
+                    <span class="status__badge pending">Pending</span>
+                    <p>Your booking request is waiting for admin approval</p>
+                  </div>
+                  <div class="status__item">
+                    <span class="status__badge confirmed">Confirmed</span>
+                    <p>Your booking has been approved and confirmed</p>
+                  </div>
+                  <div class="status__item">
+                    <span class="status__badge completed">Completed</span>
+                    <p>Service has been completed successfully</p>
+                  </div>
+                  <div class="status__item">
+                    <span class="status__badge cancelled">Cancelled</span>
+                    <p>Booking has been cancelled. You can rebook the service.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab__content" id="all-bookings">
+          <div class="bookings__section">
+            <!-- All Bookings (Completed & Cancelled) -->
+            <div class="booking__card">
+              <div class="booking__card__header">
+                <h2>All Bookings</h2>
+                <p>View your completed and cancelled bookings</p>
+              </div>
+              <!-- All Bookings Search -->
+              <div class="booking__card__content" id="all-bookings-search" style="margin-bottom: 1rem;">
+                <div class="booking__actions" style="flex-wrap: wrap; gap: 0.75rem;">
+                  <div class="search-input-wrap">
+                    <i class="ri-search-line"></i>
+                    <input id="search-pet-name" class="search-input" type="text" placeholder="Search pet name" aria-label="Search by pet name">
+                  </div>
+                  <div class="search-input-wrap">
+                    <i class="ri-search-line"></i>
+                    <input id="search-service" class="search-input" type="text" placeholder="Search service" aria-label="Search by service">
+                  </div>
+                  <div class="search-input-wrap">
+                    <i class="ri-calendar-line"></i>
+                    <input id="search-date" class="search-input" type="date" aria-label="Search by date" style="min-width: 150px;">
+                  </div>
+                  <div class="search-input-wrap">
+                    <i class="ri-time-line"></i>
+                    <input id="search-time" class="search-input" type="time" aria-label="Search by time" style="min-width: 120px;">
+                  </div>
+                  <button id="clear-all-bookings-search" class="booking__action__btn secondary" type="button" aria-label="Clear search">Clear</button>
+                </div>
+              </div>
+              <div class="booking__card__content" id="all-bookings-content">
+                <div class="empty__state">
+                  <i class="ri-calendar-line"></i>
+                  <h3>No bookings yet</h3>
+                  <button class="btn__primary" onclick="window.location.href='services.html'">Book a Service</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Booking Status Legend -->
+            <div class="booking__card">
+              <div class="booking__card__header">
+                <h2>Booking Status</h2>
+                <p>Understanding your booking status</p>
+              </div>
+              <div class="booking__card__content">
+                <div class="status__legend">
+                  <div class="status__item">
+                    <span class="status__badge pending">Pending</span>
+                    <p>Your booking request is waiting for admin approval</p>
+                  </div>
+                  <div class="status__item">
+                    <span class="status__badge confirmed">Confirmed</span>
+                    <p>Your booking has been approved and confirmed</p>
+                  </div>
+                  <div class="status__item">
+                    <span class="status__badge completed">Completed</span>
+                    <p>Service has been completed successfully</p>
+                  </div>
+                  <div class="status__item">
+                    <span class="status__badge cancelled">Cancelled</span>
+                    <p>Booking has been cancelled. You can rebook the service.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+      </div>
+    </section>
+
+    <!-- Pet Profile Modal -->
+    <div class="modal" id="pet-modal">
+        <div class="modal__overlay" onclick="closeAllModals()"></div>
+      <div class="modal__content pet__modal">
+        <button class="modal__close pet-modal-close" onclick="closeAllModals()" style="position: absolute !important; top: 15px !important; right: 15px !important; background: #ff4757 !important; color: white !important; border: none !important; border-radius: 50% !important; width: 30px !important; height: 30px !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; font-size: 14px !important; z-index: 1000 !important; margin: 0 !important; padding: 0 !important;">
+            <i class="ri-close-line"></i>
+          </button>
+        <div class="modal__header">
+                <h3 id="pet-modal-title">Pet Details</h3>
+        </div>
+        <div class="modal__body">
+          <!-- Pet Photo Section -->
+          <div class="pet__photo__section" id="pet-photo-section">
+            <div class="pet__photo__container">
+              <img id="pet-photo-display" src="" alt="Pet Photo" class="pet__modal__photo" style="display: none;">
+              <div id="pet-photo-placeholder" class="pet__photo__placeholder">
+                <i class="ri-pet-line"></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="pet__details">
+            <div class="pet__field">
+              <label>Category</label>
+              <span id="pet-category-display">Unknown</span>
+            </div>
+            <div class="pet__field">
+              <label>Breed</label>
+              <span id="pet-breed-display">Unknown</span>
+            </div>
+            <div class="pet__field">
+              <label>Age</label>
+              <span id="pet-age-display">Unknown</span>
+            </div>
+            <div class="pet__field">
+              <label>Gender</label>
+              <span id="pet-gender-display">Unknown</span>
+            </div>
+            <div class="pet__field">
+              <label>Weight</label>
+              <span id="pet-weight-display">Unknown</span>
+            </div>
+            <div class="pet__field">
+              <label>Medical Condition History Type </label>
+              <span id="pet-event-type-display">Unknown</span>
+            </div>
+            <div class="pet__field">
+              <label>Medical Condition</label>
+              <span id="pet-medical-condition-display">Unknown</span>
+            </div>
+            <div class="pet__field">
+              <label>Vaccinations</label>
+              <span id="pet-vaccinations-display">No vaccinations recorded</span>
+            </div>
+            <div class="pet__field">
+              <label>Spayed/Neutered</label>
+              <span class="status__badge" id="pet-spayed-display">Unknown</span>
+            </div>
+            <div class="pet__field">
+              <label>Notes</label>
+              <span id="pet-notes-display">No notes available</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Pet Modal -->
+    <div class="modal" id="add-pet-modal">
+        <div class="modal__overlay" onclick="closeAddPetModal()"></div>
+      <div class="modal__content add-pet-modal">
+            <button class="modal__close" onclick="closeAddPetModal()">
+          <i class="ri-close-line"></i>
+        </button>
+        <div class="signup-container">
+          <div class="left-container">
+            <div class="cat">
+              <img src="assets/pet.png" alt="Cat">
+            </div>
+          </div>
+          
+          <div class="right-container">
+                    <form id="addPetForm" enctype="multipart/form-data">
+            <header>
+                            <h1>Add Your Pet! Ensure your pet gets the best care!</h1>
+                        </header>
+              <div class="set">
+                <div class="pets-name">
+                                <label for="petName">Name *</label>
+                                <input id="petName" name="petName" type="text" placeholder="Pet's name" required autocomplete="off">
+                </div>
+                <div class="pets-photo">
+                    <label for="petPhoto">Pet Photo</label>
+                    <div class="image-upload-area" id="petImageUploadArea">
+                        <div class="upload-content">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop a pet photo here or <span class="upload-link">browse files</span></p>
+                            <small>Supports: JPG, PNG, GIF (Max 5MB)</small>
+                        </div>
+                        <input type="file" id="petPhoto" name="petPhoto" accept="image/*" style="display: none;">
+                    </div>
+                    <div id="petImagePreview" class="image-preview enhanced-preview" style="display: none;">
+                        <img id="petPreviewImg" src="" alt="Pet Preview">
+                        <div class="preview-overlay">
+                            <button type="button" onclick="removePetImage()" class="remove-image-btn">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button type="button" onclick="changePetImage()" class="change-image-btn">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="image-info">
+                        <span id="petImageFileName"></span>
+                        <span id="petImageFileSize"></span>
+                    </div>
+                </div>
+              </div>
+              <div class="set" style="display: flex !important; flex-direction: row !important; gap: 12px !important; align-items: flex-end !important;">
+                <div class="pets-category" style="flex: 1 !important; width: auto !important; min-width: 0 !important;">
+                                <label for="petCategory" style="display: block !important; margin-bottom: 5px !important;">Pet Category *</label>
+                                <select id="petCategory" name="petCategory" required onchange="handlePetCategoryChange()" style="width: 100% !important;">
+                                    <option value="" disabled selected>Select Pet Category</option>
+                                    <option value="KITTEN ">Kitten</option>
+                                    <option value="ADULT SHORT HAIR">Adult Short Hair</option>
+                                    <option value="ADULT LONG HAIR">Adult Long Hair</option>
+                                </select>
+                                <div class="custom-category" style="display: none; margin-top: 10px;">
+                                    <label for="customCategory">Custom Category Name *</label>
+                                    <input type="text" name="customCategory" id="customCategory" placeholder="Enter custom category name" style="width: 100%; padding: 8px; margin-top: 5px;">
+                                </div>
+                </div>
+                <div class="pets-breed" style="flex: 1 !important; width: auto !important; min-width: 0 !important;">
+                                <label for="petBreed" style="display: block !important; margin-bottom: 5px !important;">Breed *</label>
+                                <select id="petBreed" name="petBreed" required style="width: 100% !important;">
+                                    <option value="" disabled selected>Select Breed</option>
+                                    <option value="BRITISH SHORTHAIR">British Shorthair</option>
+                                    <option value="PERSIAN CAT">Persian Cat</option>
+                                    <option value="RAGDOLL">Ragdoll</option>
+                                    <option value="SIAMESE">Siamese</option>
+                                    <option value="SPHYNX">Sphynx</option>
+                                    <option value="ABYSSINIAN">Abyssinian</option>
+                                    <option value="SCOTTISH FOLD">Scottish Fold</option>
+                                    <option value="AMERICAN SHORTHAIR">American Shorthair</option>
+                                    <option value="BURMESE">Burmese</option>
+                                    <option value="RUSSIAN BLUE">Russian Blue</option>
+                                    <option value="SIBERIAN">Siberian</option>
+                                    <option value="EXOTIC SHORTHAIR">Exotic Shorthair</option>
+                                    <option value="BENGAL">Bengal</option>
+                                    <option value="MAINE COON">Maine Coon</option>
+                                </select>
+                </div>
+              </div>
+              <div class="set age-weight-set">
+                <div class="pets-age">
+                                <label for="petAge">Age (Years) *</label>
+                                <input id="petAge" name="petAge" type="number" min="0" max="30" placeholder="Enter age in years" required autocomplete="off">
+                </div>
+                <div class="pets-weight">
+                            <label for="petWeight">Weight (KG) <span class="optional"></span></label>
+                            <input id="petWeight" name="petWeight" type="text" placeholder="e.g., 2.5.." pattern="[0-9+\-\.\s]*" title="Only numbers, ranges (e.g., 0-2), and + symbol allowed">
+                </div>
+              </div>
+              <div class="set">
+                <div class="pets-gender">
+                                <label>Gender *</label>
+                  <div class="radio-container">
+                                    <input id="pet-gender-female" name="petGender" type="radio" value="female" required>
+                    <label for="pet-gender-female">Female</label>
+                                    <input id="pet-gender-male" name="petGender" type="radio" value="male" required>
+                    <label for="pet-gender-male">Male</label>
+                  </div>
+                </div>
+                <div class="pets-spayed-neutered">
+                                <label>Spayed or Neutered *</label>
+                  <div class="radio-container">
+                                    <input id="pet-spayed" name="petSpayed" type="radio" value="spayed" required>
+                    <label for="pet-spayed">Spayed</label>
+                                    <input id="pet-neutered" name="petSpayed" type="radio" value="neutered" required>
+                    <label for="pet-neutered">Neutered</label>
+                  </div>
+                </div>
+              </div>
+              <div class="set">
+                <div class="pets-event-type">
+                            <label for="petEventType">Medical Condition History Types *</label>
+                            <select id="petEventType" name="petEventType" required onchange="updateMedicalConditions()">
+                                <option value="" disabled selected>Select Medical Condition Type</option>
+                                <option value="none">None</option>
+                                <option value="illness">Illness / Infection</option>
+                                <option value="surgery">Surgery</option>
+                                <option value="injury">Injury / Trauma</option>
+                                <option value="allergy">Allergic Reaction</option>
+                            </select>
+                </div>
+                <div class="pets-medical-condition">
+                            <label for="petMedicalCondition">Medical Condition *</label>
+                            <select id="petMedicalCondition" name="petMedicalCondition" required>
+                                <option value="" disabled selected>Select Medical Type first</option>
+                            </select>
+                </div>
+              </div>
+              
+              <!-- Vaccination Section -->
+              <div class="pets-vaccination-section">
+                <h3>Vaccination Records</h3>
+                <div class="vaccination-grid">
+                  <div class="vaccination-item">
+                    <label>
+                      <input type="checkbox" name="fvrcp" value="on" onchange="toggleVaccinationDate(this)">
+                      <span class="vaccine-name">FVRCP (Feline Viral Rhinotracheitis, Calicivirus, Panleukopenia)</span>
+                    </label>
+                    <input type="date" name="fvrcp_date" class="vaccination-date" placeholder="Vaccination Date" disabled>
+                  </div>
+                  
+                  <div class="vaccination-item">
+                    <label>
+                      <input type="checkbox" name="rabies" value="on" onchange="toggleVaccinationDate(this)">
+                      <span class="vaccine-name">Rabies</span>
+                    </label>
+                    <input type="date" name="rabies_date" class="vaccination-date" placeholder="Vaccination Date" disabled>
+                  </div>
+                  
+                  <div class="vaccination-item">
+                    <label>
+                      <input type="checkbox" name="felv" value="on" onchange="toggleVaccinationDate(this)">
+                      <span class="vaccine-name">FeLV (Feline Leukemia Virus)</span>
+                    </label>
+                    <input type="date" name="felv_date" class="vaccination-date" placeholder="Vaccination Date" disabled>
+                  </div>
+                  
+                  <div class="vaccination-item">
+                    <label>
+                      <input type="checkbox" name="fiv" value="on" onchange="toggleVaccinationDate(this)">
+                      <span class="vaccine-name">FIV (Feline Immunodeficiency Virus)</span>
+                    </label>
+                    <input type="date" name="fiv_date" class="vaccination-date" placeholder="Vaccination Date" disabled>
+                  </div>
+                  
+                  <div class="vaccination-item">
+                    <label>
+                      <input type="checkbox" name="bordetella" value="on" onchange="toggleVaccinationDate(this)">
+                      <span class="vaccine-name">Bordetella (Kennel Cough)</span>
+                    </label>
+                    <input type="date" name="bordetella_date" class="vaccination-date" placeholder="Vaccination Date" disabled>
+                  </div>
+                  
+                  <div class="vaccination-item">
+                    <label>
+                      <input type="checkbox" name="chlamydophila" value="on" onchange="toggleVaccinationDate(this)">
+                      <span class="vaccine-name">Chlamydophila felis</span>
+                    </label>
+                    <input type="date" name="chlamydophila_date" class="vaccination-date" placeholder="Vaccination Date" disabled>
+                  </div>
+                  
+                  <div class="vaccination-item">
+                    <label>
+                      <input type="checkbox" name="fip" value="on" onchange="toggleVaccinationDate(this)">
+                      <span class="vaccine-name">FIP (Feline Infectious Peritonitis) - Controversial efficacy</span>
+                    </label>
+                    <input type="date" name="fip_date" class="vaccination-date" placeholder="Vaccination Date" disabled>
+                  </div>
+                  
+                  <div class="vaccination-item">
+                    <label>
+                      <input type="checkbox" name="giardia" value="on" onchange="toggleVaccinationDate(this)">
+                      <span class="vaccine-name">Giardia - Not commonly recommended</span>
+                    </label>
+                    <input type="date" name="giardia_date" class="vaccination-date" placeholder="Vaccination Date" disabled>
+                  </div>
+                  
+                  <div class="vaccination-item">
+                    <label>
+                      <input type="checkbox" name="ringworm" value="on" onchange="toggleVaccinationDate(this)">
+                      <span class="vaccine-name">Ringworm - Available in some areas</span>
+                    </label>
+                    <input type="date" name="ringworm_date" class="vaccination-date" placeholder="Vaccination Date" disabled>
+                  </div>
+                  
+                  <div class="vaccination-item other-vaccination">
+                    <label>
+                      <input type="checkbox" name="others" value="on" onchange="toggleVaccinationDate(this)">
+                      <span class="vaccine-name">Others:</span>
+                    </label>
+                    <input type="text" name="other_vaccine" class="other-vaccine-input" placeholder="Specify other vaccine" disabled>
+                    <input type="date" name="other_vaccine_date" class="vaccination-date" placeholder="Vaccination Date" disabled>
+                  </div>
+                </div>
+              </div>
+              
+                        <div class="pets-notes">
+                            <label for="petNotes">Special Notes</label>
+                            <textarea id="petNotes" name="petNotes" placeholder="Any special notes about your pet..."></textarea>
+              </div>
+            <footer>
+              <div class="set">
+                                <button id="back" type="button" onclick="closeAddPetModal()">Cancel</button>
+                                <button id="next" type="submit">Add Pet</button>
+              </div>
+            </footer>
+                    </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="dashboard__footer">
+      <div class="footer__container">
+        <div class="footer__logo">
+                <img src="assets/logo.png" alt="Catswell Logo">
+        </div>
+        <div class="footer__copyright">
+        © 2025 Catswell Pet Care Management. All rights reserved.
+        </div>
+      </div>
+    </footer>
+
+    <!-- MySQL Authentication -->
+    <script>
+      // Update navigation welcome button to match other pages
+      window.updateNavWelcomeButton = function(firstName) {
+        const loginItem = document.querySelector('.nav__login-item');
+        if (loginItem) {
+          loginItem.innerHTML = `
+            <div aria-label="User Profile" tabindex="0" role="button" class="user-profile" style="width:auto;" onclick="openProfileSidebar()">
+              <div class="user-profile-inner" style="width:auto; padding:0 12px; white-space:nowrap; max-width:none;">
+                <i class="ri-user-3-fill"></i>
+                <span>Welcome, ${firstName || 'User'}</span>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // Proper logout function - calls logout API and clears session
+      window.signOut = () => {
+        if (confirm('Are you sure you want to sign out?')) {
+          
+          // Clear session data
+          fetch('auth.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'action=logout'
+          }).then(response => {
+            return response.json();
+          }).then(data => {
+            
+            // Clear sessionStorage
+            sessionStorage.clear();
+            
+            // Clear any localStorage if needed
+            localStorage.removeItem('user_data');
+            localStorage.removeItem('login_status');
+            
+            // Force clear tab session ID
+            sessionStorage.removeItem('tab_session_id');
+            
+            // Redirect to index.html
+            window.location.href = 'index.html';
+          }).catch(error => {
+            console.error('Logout error:', error);
+            // Still redirect even if logout request fails
+            sessionStorage.clear();
+            localStorage.removeItem('user_data');
+            localStorage.removeItem('login_status');
+            sessionStorage.removeItem('tab_session_id');
+            window.location.href = 'index.html';
+          });
+        }
+      };
+
+      // Profile sidebar functions for MySQL
+          window.openProfileSidebar = () => {
+            const sidebar = document.getElementById('profile-sidebar');
+            const overlay = document.getElementById('profile-sidebar-overlay');
+            
+            if (!sidebar || !overlay) {
+              console.error('Profile sidebar elements not found');
+              return;
+            }
+            
+            // Lock body scroll
+            document.body.style.overflow = 'hidden';
+            
+            // Use CSS classes for proper animation
+            overlay.style.display = 'block';
+            sidebar.setAttribute('aria-hidden', 'false');
+            
+            // Add active classes for animation
+            setTimeout(() => {
+              overlay.classList.add('active');
+              sidebar.classList.add('active');
+            }, 10);
+            
+            // Load user data when opening profile sidebar
+            loadUserProfileData();
+          };
+
+          window.closeProfileSidebar = () => {
+            const sidebar = document.getElementById('profile-sidebar');
+            const overlay = document.getElementById('profile-sidebar-overlay');
+            
+            if (!sidebar || !overlay) return;
+            
+            // Unlock body scroll
+            document.body.style.overflow = '';
+            
+            // Remove active classes for animation
+            overlay.classList.remove('active');
+            sidebar.classList.remove('active');
+            sidebar.setAttribute('aria-hidden', 'true');
+            
+            // Hide overlay after animation
+            setTimeout(() => {
+              overlay.style.display = 'none';
+            }, 300);
+          };
+
+      // Load user profile data from database
+      async function loadUserProfileData() {
+        try {
+          
+          const response = await fetch('auth.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'action=get_current_user&tab_session_id=' + encodeURIComponent(window.tabSessionId || '')
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            const userData = result.user;
+            
+            // Update profile fields
+            const firstNameEl = document.getElementById('profile-firstname');
+            const lastNameEl = document.getElementById('profile-lastname');
+            const emailEl = document.getElementById('profile-email');
+            const phoneEl = document.getElementById('profile-phone');
+            const addressEl = document.getElementById('profile-address');
+            
+            if (firstNameEl) firstNameEl.textContent = userData.first_name || 'Not provided';
+            if (lastNameEl) lastNameEl.textContent = userData.last_name || 'Not provided';
+            if (emailEl) emailEl.textContent = userData.email || 'Not provided';
+            if (phoneEl) phoneEl.textContent = userData.phone_number || 'Not provided';
+            if (addressEl) addressEl.textContent = userData.address || 'Not provided';
+            
+            // Update profile photo if available
+            const profilePhotoEl = document.getElementById('profile-photo');
+            if (profilePhotoEl && userData.profile_photo) {
+              profilePhotoEl.src = userData.profile_photo;
+            }
+            
+            // Welcome message already updated by dashboard load - no need to update again
+            
+          } else {
+            
+            // Show default values when not logged in
+            const firstNameEl = document.getElementById('profile-firstname');
+            const lastNameEl = document.getElementById('profile-lastname');
+            const emailEl = document.getElementById('profile-email');
+            const phoneEl = document.getElementById('profile-phone');
+            const addressEl = document.getElementById('profile-address');
+            
+            if (firstNameEl) firstNameEl.textContent = 'Guest';
+            if (lastNameEl) lastNameEl.textContent = 'User';
+            if (emailEl) emailEl.textContent = 'Not logged in';
+            if (phoneEl) phoneEl.textContent = 'Not logged in';
+            if (addressEl) addressEl.textContent = 'Not logged in';
+            
+            // Update welcome message for guest
+            updateNavWelcomeButton('Guest');
+            
+            // Update welcome section
+            const welcomeTitle = document.querySelector('.welcome__content h1');
+            if (welcomeTitle) {
+              welcomeTitle.textContent = 'Welcome to Catswell Dashboard!';
+            }
+            
+            // Show login prompt
+            const welcomeContent = document.querySelector('.welcome__content p');
+            if (welcomeContent) {
+              welcomeContent.innerHTML = 'Please <a href="index.html" style="color: #007bff; text-decoration: underline;">login</a> to access your pets and bookings';
+            }
+          }
+        } catch (error) {
+          console.error('Error loading profile data:', error);
+          
+          // Show default values on error
+          const firstNameEl = document.getElementById('profile-firstname');
+          const lastNameEl = document.getElementById('profile-lastname');
+          const emailEl = document.getElementById('profile-email');
+          const phoneEl = document.getElementById('profile-phone');
+          const addressEl = document.getElementById('profile-address');
+          
+          if (firstNameEl) firstNameEl.textContent = 'Guest';
+          if (lastNameEl) lastNameEl.textContent = 'User';
+          if (emailEl) emailEl.textContent = 'Not logged in';
+          if (phoneEl) phoneEl.textContent = 'Not logged in';
+          if (addressEl) addressEl.textContent = 'Not logged in';
+          
+          updateNavWelcomeButton('Guest');
+        }
+      }
+
+      // Profile editing functions for MySQL
+          window.editProfile = () => {
+            // Toggle edit mode
+            const isEditing = document.querySelector('.profile-field input');
+            
+            if (isEditing) {
+              // Currently editing - save changes
+              saveProfileChanges();
+            } else {
+              // Not editing - enter edit mode
+              enterEditMode();
+            }
+          };
+
+          window.enterEditMode = () => {
+            // Convert all profile fields to input fields
+            const fields = ['profile-firstname', 'profile-lastname', 'profile-email', 'profile-phone', 'profile-address'];
+            
+            fields.forEach(fieldId => {
+              const span = document.getElementById(fieldId);
+              if (span) {
+                const value = span.textContent;
+                const input = document.createElement('input');
+                const fieldName = fieldId.replace('profile-', '');
+                
+                // Set input type based on field
+                if (fieldName === 'email') {
+                  input.type = 'email';
+                } else if (fieldName === 'phone') {
+                  input.type = 'tel';
+                } else {
+                  input.type = 'text';
+                }
+                
+                input.value = value;
+                input.style.cssText = 'width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;';
+                input.name = fieldName;
+                
+                // Set appropriate autocomplete values
+                switch(fieldName) {
+                  case 'firstname':
+                    input.autocomplete = 'given-name';
+                    break;
+                  case 'lastname':
+                    input.autocomplete = 'family-name';
+                    break;
+                  case 'email':
+                    input.autocomplete = 'email';
+                    break;
+                  case 'phone':
+                    input.autocomplete = 'tel';
+                    // Add number-only validation for phone field
+                    input.addEventListener('input', function(e) {
+                      // Remove any non-numeric characters except + at the beginning
+                      let value = e.target.value;
+                      if (value.startsWith('+')) {
+                        value = '+' + value.slice(1).replace(/[^0-9]/g, '');
+                      } else {
+                        value = value.replace(/[^0-9]/g, '');
+                      }
+                      e.target.value = value;
+                    });
+                    
+                    // Prevent non-numeric characters on keypress
+                    input.addEventListener('keypress', function(e) {
+                      const char = String.fromCharCode(e.which);
+                      // Allow: backspace, delete, tab, escape, enter, + (only at start)
+                      if ([8, 9, 27, 13, 46].indexOf(e.keyCode) !== -1 ||
+                          (e.keyCode === 65 && e.ctrlKey === true) || // Ctrl+A
+                          (e.keyCode >= 35 && e.keyCode <= 40)) { // Home, End, Left, Right, Up, Down
+                        return;
+                      }
+                      // Allow + only at the beginning
+                      if (char === '+' && e.target.selectionStart === 0) {
+                        return;
+                      }
+                      // Only allow numbers
+                      if (!/[0-9]/.test(char)) {
+                        e.preventDefault();
+                      }
+                    });
+                    break;
+                  case 'address':
+                    input.autocomplete = 'street-address';
+                    break;
+                  default:
+                    input.autocomplete = 'off';
+                }
+                
+                span.parentNode.replaceChild(input, span);
+                input.id = fieldId;
+              }
+            });
+
+            // Update button text and show cancel button
+            const editBtn = document.querySelector('.btn-edit-profile');
+            const cancelBtn = document.querySelector('.btn-cancel-edit');
+            const photoActions = document.querySelector('.profile-photo-actions');
+            
+            if (editBtn) {
+              editBtn.innerHTML = '<i class="ri-save-line"></i> Save Changes';
+            }
+            if (cancelBtn) {
+              cancelBtn.style.display = 'block';
+            }
+            if (photoActions) {
+              photoActions.style.display = 'flex';
+            }
+          };
+
+          window.saveProfileChanges = async () => {
+            try {
+              // Get values from input fields
+              const firstName = document.getElementById('profile-firstname').value;
+              const lastName = document.getElementById('profile-lastname').value;
+              const email = document.getElementById('profile-email').value;
+              const phone = document.getElementById('profile-phone').value;
+              const address = document.getElementById('profile-address').value;
+
+              // Save to database
+              const formData = new FormData();
+              formData.append('action', 'update_profile');
+              formData.append('first_name', firstName);
+              formData.append('last_name', lastName);
+              formData.append('email', email);
+              formData.append('phone', phone);
+              formData.append('address', address);
+
+              const response = await fetch('auth.php', {
+                method: 'POST',
+                body: formData
+              });
+              
+              const result = await response.json();
+
+              if (result.success) {
+                // Update display name in navigation with first name only
+                const displayName = firstName || email;
+                updateNavWelcomeButton(displayName);
+
+                // Exit edit mode
+                exitEditMode();
+
+                alert('✅ Profile updated successfully!');
+              } else {
+                alert('❌ Error updating profile: ' + result.message);
+              }
+            } catch (error) {
+              console.error('Error updating profile:', error);
+              alert('❌ Error updating profile. Please try again.');
+            }
+          };
+
+          window.exitEditMode = () => {
+            // Convert all input fields back to span elements
+            const fields = ['profile-firstname', 'profile-lastname', 'profile-email', 'profile-phone', 'profile-address'];
+            
+            fields.forEach(fieldId => {
+              const input = document.getElementById(fieldId);
+              if (input) {
+                const value = input.value;
+                const span = document.createElement('span');
+                span.textContent = value;
+                span.id = fieldId;
+                input.parentNode.replaceChild(span, input);
+              }
+            });
+
+            // Update button text and hide cancel button
+            const editBtn = document.querySelector('.btn-edit-profile');
+            const cancelBtn = document.querySelector('.btn-cancel-edit');
+            const photoActions = document.querySelector('.profile-photo-actions');
+            
+            if (editBtn) {
+              editBtn.innerHTML = '<i class="ri-edit-line"></i> Edit Profile';
+            }
+            if (cancelBtn) {
+              cancelBtn.style.display = 'none';
+            }
+            if (photoActions) {
+              photoActions.style.display = 'none';
+            }
+          };
+
+          window.cancelEdit = () => {
+            // Exit edit mode without reloading data
+            window.exitEditMode();
+          };
+
+
+      // Profile photo functionality for MySQL
+          window.uploadProfilePhoto = async () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = async (e) => {
+              const file = e.target.files[0];
+              if (file) {
+                try {
+              
+
+              const formData = new FormData();
+              formData.append('action', 'upload_profile_photo');
+              formData.append('photo', file);
+
+              const response = await fetch('upload.php', {
+                method: 'POST',
+                body: formData
+              });
+              
+              const responseText = await response.text();
+              let result;
+              try {
+                result = JSON.parse(responseText);
+              } catch (e) {
+                console.error('JSON Parse Error:', responseText);
+                alert('❌ Server error: Invalid response format');
+                return;
+              }
+
+              if (result.success) {
+                  // Update profile photo display
+                const profilePhotoEl = document.getElementById('profile-photo');
+                  if (profilePhotoEl) {
+                  profilePhotoEl.src = result.url;
+                }
+
+                alert('✅ Profile photo updated successfully!');
+              } else {
+                alert('❌ Error uploading photo: ' + result.message);
+              }
+                } catch (error) {
+                  console.error('Error uploading photo:', error);
+              alert('❌ Error uploading photo. Please try again.');
+                }
+              }
+            };
+            input.click();
+          };
+
+          window.deleteProfilePhoto = async () => {
+            try {
+              // Get current user data to check if there's a profile photo
+              const userResponse = await fetch('auth.php', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=get_current_user&tab_session_id=' + encodeURIComponent(window.tabSessionId || '')
+              });
+              
+              const userResult = await userResponse.json();
+              
+              if (!userResult.success || !userResult.user) {
+                alert('❌ Please log in to manage your profile photo.');
+                return;
+              }
+              
+              const currentPhoto = userResult.user.profile_photo;
+              
+              // Check if user has a profile photo
+              if (!currentPhoto || currentPhoto.includes('data:image/svg+xml')) {
+                alert('ℹ️ No profile photo to delete.');
+                return;
+              }
+              
+              // Extract filename from the full path
+              const filename = currentPhoto.split('/').pop();
+              
+              // Send delete request with just the filename - upload.php will handle the path construction
+              const response = await fetch('upload.php', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=delete_file&filepath=' + encodeURIComponent(filename)
+              });
+              
+              const result = await response.json();
+
+              if (result.success) {
+                  // Update profile photo display to default
+                  const profilePhotoEl = document.getElementById('profile-photo');
+                  if (profilePhotoEl) {
+                    profilePhotoEl.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzIiIGZpbGw9IiNGM0Y0RjYiLz4KPHBhdGggZD0iTTMyIDIwQzM2LjQxODMgMjAgNDAgMjMuNTgxNyA0MCAyOEM0MCAzMi40MTgzIDM2LjQxODMgMzYgMzIgMzZDMjcuNTgxNyAzNiAyNCAzMi40MTgzIDI0IDI4QzI0IDIzLjU4MTcgMjcuNTgxNyAyMCAzMiAyMFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTE2IDQ4QzE2IDQwLjI2ODcgMjIuMjY4NyAzNCAzMCAzNEgzNEM0MS43MzEzIDM0IDQ4IDQwLjI2ODcgNDggNDhWNDhIMTZaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo=';
+                  }
+
+                alert('✅ Profile photo deleted successfully!');
+              } else {
+                alert('❌ Error deleting photo: ' + result.message);
+              }
+            } catch (error) {
+              console.error('Error deleting photo:', error);
+              alert('❌ Error deleting photo. Please try again.');
+            }
+          };
+
+          // Close sidebar when clicking overlay or close button
+      document.addEventListener('DOMContentLoaded', () => {
+        const overlay = document.getElementById('profile-sidebar-overlay');
+        const closeBtn = document.getElementById('profile-sidebar-close');
+        if (overlay) overlay.addEventListener('click', closeProfileSidebar);
+        if (closeBtn) closeBtn.addEventListener('click', closeProfileSidebar);
+      });
+
+      // Hamburger menu toggle functionality
+      const menuBtn = document.getElementById('menu-btn');
+      const navLinks = document.getElementById('nav-links');
+
+      if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          navLinks.classList.toggle('nav__links--active');
+        });
+      }
+    </script>
+    
+    <!-- All Bookings Search Script -->
+    <script>
+      (function setupAllBookingsSearch() {
+        function normalize(str) {
+          return (str || '').toString().trim().toLowerCase();
+        }
+        function formatDateVariants(value) {
+          if (!value) return [];
+          const parts = value.split('-');
+          if (parts.length !== 3) return [value];
+          const [y, m, d] = parts;
+          const ddmmyyyy = `${d}/${m}/${y}`;
+          const mmddyyyy = `${m}/${d}/${y}`;
+          return [value, ddmmyyyy, mmddyyyy];
+        }
+        function getBookingItemsContainer() {
+          return document.getElementById('all-bookings-content');
+        }
+        function getBookingItems() {
+          const container = getBookingItemsContainer();
+          if (!container) return [];
+          let items = Array.from(container.querySelectorAll('.booking__item'));
+          if (items.length === 0) {
+            items = Array.from(container.children).filter(el => el.nodeType === 1 && !el.classList.contains('empty__state'));
+          }
+          return items;
+        }
+        function itemMatches(item, filters) {
+          const text = normalize(item.innerText);
+          if (filters.pet && !text.includes(filters.pet)) return false;
+          if (filters.service && !text.includes(filters.service)) return false;
+          if (filters.time && !text.includes(filters.time)) return false;
+          if (filters.dateVariants.length) {
+            const anyDateMatch = filters.dateVariants.some(v => text.includes(v));
+            if (!anyDateMatch) return false;
+          }
+          return true;
+        }
+        function applyAllBookingsFilter() {
+          const pet = normalize(document.getElementById('search-pet-name')?.value);
+          const service = normalize(document.getElementById('search-service')?.value);
+          const dateVal = document.getElementById('search-date')?.value || '';
+          const timeVal = normalize(document.getElementById('search-time')?.value);
+          const dateVariants = formatDateVariants(dateVal).map(normalize);
+          const items = getBookingItems();
+          let anyVisible = false;
+          items.forEach(item => {
+            const visible = itemMatches(item, { pet, service, time: timeVal, dateVariants });
+            item.style.display = visible ? '' : 'none';
+            if (visible) anyVisible = true;
+          });
+          const empty = getBookingItemsContainer()?.querySelector('.empty__state');
+          if (empty) {
+            empty.style.display = anyVisible || items.length ? 'none' : '';
+          }
+        }
+        function clearAllBookingsSearch() {
+          const petEl = document.getElementById('search-pet-name');
+          const srvEl = document.getElementById('search-service');
+          const dateEl = document.getElementById('search-date');
+          const timeEl = document.getElementById('search-time');
+          if (petEl) petEl.value = '';
+          if (srvEl) srvEl.value = '';
+          if (dateEl) dateEl.value = '';
+          if (timeEl) timeEl.value = '';
+          applyAllBookingsFilter();
+        }
+        function attachAllBookingsSearchHandlers() {
+          const petEl = document.getElementById('search-pet-name');
+          const srvEl = document.getElementById('search-service');
+          const dateEl = document.getElementById('search-date');
+          const timeEl = document.getElementById('search-time');
+          const clearBtn = document.getElementById('clear-all-bookings-search');
+          if (petEl) petEl.addEventListener('input', applyAllBookingsFilter);
+          if (srvEl) srvEl.addEventListener('input', applyAllBookingsFilter);
+          if (dateEl) dateEl.addEventListener('change', applyAllBookingsFilter);
+          if (timeEl) timeEl.addEventListener('change', applyAllBookingsFilter);
+          if (clearBtn) clearBtn.addEventListener('click', clearAllBookingsSearch);
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', () => {
+            attachAllBookingsSearchHandlers();
+            applyAllBookingsFilter();
+          });
+        } else {
+          attachAllBookingsSearchHandlers();
+          applyAllBookingsFilter();
+        }
+        window.applyAllBookingsFilter = applyAllBookingsFilter;
+        window.clearAllBookingsSearch = clearAllBookingsSearch;
+      })();
+    </script>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script src="dashboard.js?v=update-counts"></script>
+    
+    <!-- Ensure showFileName function is available immediately -->
+    <script>
+        // Show file name only (no image preview) - Global function
+        window.showFileName = function(input) {
+            if (input.files && input.files[0]) {
+                const fileName = input.files[0].name;
+                const fileNameElement = document.getElementById('fileName');
+                if (fileNameElement) {
+                    fileNameElement.textContent = fileName;
+                }
+            }
+        };
+        // Enhanced Pet Image Upload Function
+        window.setupPetImageUpload = function() {
+            const uploadArea = document.getElementById('petImageUploadArea');
+            const fileInput = document.getElementById('petPhoto');
+            const uploadLink = uploadArea.querySelector('.upload-link');
+
+            // Handle click on the "browse files" span
+            if (uploadLink) {
+                uploadLink.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    fileInput.click();
+                };
+            }
+
+            // Handle click on the upload area
+            uploadArea.onclick = function(e) {
+                if (e.target === uploadArea || e.target.closest('.upload-content')) {
+                    fileInput.click();
+                }
+            };
+
+            // Handle drag and drop
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    handlePetImageSelect(files[0]);
+                }
+            });
+
+            // Handle file input change
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handlePetImageSelect(e.target.files[0]);
+                }
+            });
+        };
+
+        // Handle pet image selection
+        function handlePetImageSelect(file) {
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                alert('Please select a valid image file.');
+                return;
+            }
+
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must be less than 5MB.');
+                return;
+            }
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('petImagePreview');
+                const previewImg = document.getElementById('petPreviewImg');
+                const uploadArea = document.getElementById('petImageUploadArea');
+                const fileName = document.getElementById('petImageFileName');
+                const fileSize = document.getElementById('petImageFileSize');
+
+                previewImg.src = e.target.result;
+                preview.style.display = 'block';
+                uploadArea.style.display = 'none';
+
+                // Show file info
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Remove pet image
+        window.removePetImage = function() {
+            const preview = document.getElementById('petImagePreview');
+            const uploadArea = document.getElementById('petImageUploadArea');
+            const fileInput = document.getElementById('petPhoto');
+            const fileName = document.getElementById('petImageFileName');
+            const fileSize = document.getElementById('petImageFileSize');
+
+            preview.style.display = 'none';
+            uploadArea.style.display = 'block';
+            fileInput.value = '';
+            fileName.textContent = '';
+            fileSize.textContent = '';
+        };
+
+        // Change pet image
+        window.changePetImage = function() {
+            document.getElementById('petPhoto').click();
+        };
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // Pet Category Custom Selection Function
+        window.handlePetCategoryChange = function() {
+            const categorySelect = document.getElementById('petCategory');
+            const customCategoryDiv = document.querySelector('.custom-category');
+            const customCategoryInput = document.getElementById('customCategory');
+            const ageLabel = document.querySelector('label[for="petAge"]');
+            const ageInput = document.getElementById('petAge');
+            
+            if (categorySelect && customCategoryDiv && customCategoryInput) {
+                if (categorySelect.value === 'custom') {
+                    customCategoryDiv.style.display = 'block';
+                    customCategoryInput.required = true;
+                } else {
+                    customCategoryDiv.style.display = 'none';
+                    customCategoryInput.required = false;
+                    customCategoryInput.value = '';
+                }
+            } else {
+                console.error('Missing elements for custom category functionality');
+            }
+            
+            // Handle age field changes based on category
+            if (categorySelect && ageLabel && ageInput) {
+                const selectedCategory = categorySelect.value.trim().toUpperCase();
+                
+                if (selectedCategory === 'KITTEN') {
+                    // Change to months for kittens
+                    ageLabel.textContent = 'Age (Months) *';
+                    ageInput.placeholder = 'Enter age in months';
+                    ageInput.min = '0';
+                    ageInput.max = '12';
+                    ageInput.title = 'Enter age in months (0-12)';
+                } else {
+                    // Change to years for adults
+                    ageLabel.textContent = 'Age (Years) *';
+                    ageInput.placeholder = 'Enter age in years';
+                    ageInput.min = '0';
+                    ageInput.max = '30';
+                    ageInput.title = 'Enter age in years (0-30)';
+                }
+            }
+        };
+        
+        // Initialize pet category change handler when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const categorySelect = document.getElementById('petCategory');
+            if (categorySelect) {
+                categorySelect.addEventListener('change', handlePetCategoryChange);
+                // Also call it once to set initial state
+                handlePetCategoryChange();
+            } else {
+                console.error('Pet category select not found');
+            }
+            
+            // Initialize pet image upload
+            setupPetImageUpload();
+        });
+        
+        // Fallback initialization in case DOM is already loaded
+        if (document.readyState === 'loading') {
+            // DOM is still loading, wait for DOMContentLoaded
+        } else {
+            // DOM is already loaded, initialize immediately
+            const categorySelect = document.getElementById('petCategory');
+            if (categorySelect) {
+                categorySelect.addEventListener('change', handlePetCategoryChange);
+                handlePetCategoryChange();
+            }
+            
+            // Initialize pet image upload
+            setupPetImageUpload();
+        }
+        
+        // Medical Condition Dropdown Function
+        window.updateMedicalConditions = function() {
+            const eventType = document.getElementById('petEventType').value;
+            const medicalConditionSelect = document.getElementById('petMedicalCondition');
+            
+            // Clear existing options
+            medicalConditionSelect.innerHTML = '';
+            
+            // Define medical conditions for each event type
+            const medicalConditions = {
+                'illness': [
+                    'Upper Respiratory Infection',
+                    'Urinary Tract Infection (UTI)',
+                    'Ear Infection (Otitis)',
+                    'Skin Infection (Pyoderma)',
+                    'Gastrointestinal Upset (Vomiting/Diarrhea)',
+                    'Ringworm',
+                    'Conjunctivitis (Pink Eye)',
+                    'Kidney Infection',
+                    'Other'
+                ],
+                'surgery': [
+                    'Spay / Ovariohysterectomy',
+                    'Neuter / Castration',
+                    'Dental Extraction / Cleaning',
+                    'Mass/Lump Removal',
+                    'ACL Repair (TPLO, TTA)',
+                    'Foreign Body Removal',
+                    'Wound Repair / Suturing',
+                    'Fracture Repair',
+                    'Other'
+                ],
+                'injury': [
+                    'Bite Wound',
+                    'Laceration / Cut',
+                    'Fracture / Broken Bone',
+                    'Sprain / Strain',
+                    'Burn',
+                    'Hit by Car',
+                    'Other'
+                ],
+                'allergy': [
+                    'Insect Bite/Sting (Bee, Wasp)',
+                    'Vaccine Reaction',
+                    'Food Allergy',
+                    'Environmental Allergy',
+                    'Medication Reaction',
+                    'Other'
+                ]
+            };
+            
+            if (eventType === 'none') {
+                // Handle "None" option
+                const defaultOption = document.createElement('option');
+                defaultOption.value = 'none';
+                defaultOption.textContent = 'No Medical Conditions';
+                defaultOption.selected = true;
+                medicalConditionSelect.appendChild(defaultOption);
+            } else if (eventType && medicalConditions[eventType]) {
+                // Add default option
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Select Medical Condition';
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                medicalConditionSelect.appendChild(defaultOption);
+                
+                // Add medical condition options
+                medicalConditions[eventType].forEach(condition => {
+                    const option = document.createElement('option');
+                    option.value = condition.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                    option.textContent = condition;
+                    medicalConditionSelect.appendChild(option);
+                });
+            } else {
+                // No event type selected
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Select Medical Condition Type first';
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                medicalConditionSelect.appendChild(defaultOption);
+            }
+        };
+        
+        
+        // Vaccination checkbox functionality
+        window.toggleVaccinationDate = function(checkbox) {
+            const vaccinationItem = checkbox.closest('.vaccination-item');
+            const dateInput = vaccinationItem.querySelector('.vaccination-date');
+            const otherInput = vaccinationItem.querySelector('.other-vaccine-input');
+            
+            if (checkbox.checked) {
+                dateInput.disabled = false;
+                dateInput.style.opacity = '1';
+                if (otherInput) {
+                    otherInput.disabled = false;
+                    otherInput.style.opacity = '1';
+                }
+            } else {
+                dateInput.disabled = true;
+                dateInput.style.opacity = '0.5';
+                dateInput.value = ''; // Clear date when unchecked
+                if (otherInput) {
+                    otherInput.disabled = true;
+                    otherInput.style.opacity = '0.5';
+                    otherInput.value = ''; // Clear other vaccine name when unchecked
+                }
+            }
+        };
+        
+        // Initialize vaccination checkboxes on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const vaccinationCheckboxes = document.querySelectorAll('.vaccination-item input[type="checkbox"]');
+            vaccinationCheckboxes.forEach(checkbox => {
+                // Add event listener
+                checkbox.addEventListener('change', function() {
+                    toggleVaccinationDate(this);
+                });
+                
+                // Initialize state
+                toggleVaccinationDate(checkbox);
+            });
+        });
+        
+    </script>
+    
+    <!-- Admin Access Check -->
+    <script>
+        // Check if user is admin and redirect
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'action=get_current_user&tab_session_id=' + encodeURIComponent(window.tabSessionId || '')
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.user) {
+                    // Check if user is admin
+                    if (result.user.email === 'admin@catswell.com' || 
+                        (result.user.role && result.user.role === 'admin')) {
+                        // Redirect admin users to admin dashboard
+                        alert('Admin users should access the admin dashboard.');
+                        window.location.href = 'admin-dashboard.html';
+                    }
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+            }
+        });
+    </script>
+  </body>
+</html>
